@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://smart-contact-cdn.livelanding.it/images/favicon-{{ account }}.png">
+
+    <title></title>
+     <!-- @{{ GoogleGlobalSiteTag }} -->
+
+    <!-- @{{ GoogleTagManagerHead }} -->
+  </head>
+  <body>
+    <!-- @{{ GoogleTagManagerBody }} -->
+
+    <div id="app"></div>
+
+    <script>
+      window.$landingConfig = {
+        config: {
+          params(){
+            return {
+              //functional
+              // collection: { value: '{{ collection }}', default: '' },
+              // products: { value: JSON.parse('[{{ products }}]'), default: '1,2,3' },
+              sap: { value: '{{ sap }}', default: '' },
+              successURL: '{{ successURL }}',
+              account: { value: '{{ account }}', default: 'prezzogiusto' },
+              
+              //copy
+              copyTitle: { value: '{{ copyTitle }}', default: '' },
+              copySubtitle: { value: '{{ copySubtitle }}', default: '' },
+              copyMainCmbTitle: { value: '{{ copyMainCmbTitle }}', default: '' },
+
+              //privacy
+              privacy_1: `{{ privacy_1 }}`,
+              privacy_2: `{{ privacy_2 }}`,
+              privacy_3: `{{ privacy_3 }}`,
+              privacy_4: `{{ privacy_4 }}`,
+
+              //tracking
+              gclid: this.url.searchParams.get('gclid'),
+              f5: { value: this.url.searchParams.get('f5') || '{{ f5 }}', default: 'sem' },
+              f11: { value: this.url.searchParams.get('f11') || '{{ f11 }}', default: '' },
+              f12: { value: this.url.searchParams.get('keyword') || '0' },
+              f13: { value: this.url.searchParams.get('matchtype') || '0' },
+              f14: { value: this.url.searchParams.get('creative') || '0' },
+              f15: { value: this.url.searchParams.get('f15') || '{{ f15 }}', default: '' }
+            }
+          },
+
+          data(){
+            return{
+              //inserisci qui i dati di default da mandare in injection
+            }
+          },
+
+          injection: {
+            //injection options object
+          }
+        },
+        options: {
+
+        },
+        afterInit(landing){
+          landing.mapParamsToData(['gclid as idorigine', 'f5', 'f11', 'f12', 'f13', 'f14', 'f15']);
+          setSuccessURLParams(landing);
+        }
+      }
+
+      function setSuccessURLParams (landing){
+        if(landing.params.get('successURL')){
+          const url = new URL(landing.params.get('successURL'), location.origin);
+
+          //inserire qui la mappatura dei parametri della landing sull'url
+          const paramsMap = {
+            prov: landing.params.get('f5'),
+            f11:  landing.params.get('f11'),
+            f12:  landing.params.get('f12'),
+            f13:  landing.params.get('f13'),
+            f14:  landing.params.get('f14'),
+            f15:  landing.params.get('f15'),
+          };
+
+          Object.entries(paramsMap).forEach(([key, value]) => {
+            if(value !== undefined && value !== ''){
+              url.searchParams.append(key, value)    
+            }
+          });
+
+          landing.params.set('successURL', url.toString());
+        }
+      }
+    </script>
+
+    <!-- built files will be auto injected -->
+  </body>
+</html>
