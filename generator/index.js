@@ -1,9 +1,8 @@
 module.exports = function(api, options){
   const utils = require('./utils')(api)
 
-  console.log(options)
-  //add registry to yarnrc file
-  utils.createYarnrcFile()
+  //render template
+  api.render('./template/default')
   
   //adding smart-contact packages + extra deps.
   api.extendPackage({
@@ -20,18 +19,17 @@ module.exports = function(api, options){
     }
   })
 
-  // create jsconfig.jsona
-  api.genJSConfig({
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@/*": [
-            "src/*"
-        ]
-      }
-    }
-  })
+  // create jsconfig.json
+  utils.createJSConfig()
 
+  //create landing.config.js & landing-params.json
+
+  utils.createLandingConfig()
+  utils.createLandingParamsJson()
+
+  //
+  api.injectImports(api.entryFile, `import "@/plugins/smartland.js"`)
+  api.injectImports(api.entryFile, `import "@/plugins/smartify.js"`)
 }
 
 module.exports.hooks = api => {
@@ -39,8 +37,5 @@ module.exports.hooks = api => {
 
   api.afterInvoke(() => {
     utils.updateStylelintConfig()
-    //add landing-js plugin to vue
-    //add smartify
-
   })
 }
