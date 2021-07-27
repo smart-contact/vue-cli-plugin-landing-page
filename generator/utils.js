@@ -1,31 +1,61 @@
 const fs = require('fs')
 module.exports = function(api){
   return {
-    createYarnrcFile(){
-      const registryString = '"@smart-contact:registry" "https://npm.pkg.github.com"'
-      const yarnrcPath = api.resolve('./.yarnrc')
 
-      let content = []
-      if(fs.existsSync(yarnrcPath)){
-        content = fs.readFileSync(yarnrcPath, 'utf-8').split(/\r?\n/g)
+    createJSConfig(){
+      const filepath = api.resolve('./jsconfig.json')
+
+      const config = {
+        "compilerOptions": {
+          "baseUrl": ".",
+          "paths": {
+            "@/*": [
+                "src/*"
+            ]
+          }
+        }
       }
 
-      const alreadyInsert = content.includes(registryString)
-      if(alreadyInsert){
-        return
-      }
-
-      content.push(registryString)
-
-      fs.writeFileSync(yarnrcPath, content.join('\n'))
-      
+      fs.writeFileSync(filepath, JSON.stringify(config, null, 2), 'utf-8')
     },
 
-    // createJsConfigFile(){
-    //   const configPath = api.resolve('./jsconfig.json')
-    //   const config = {}
+    updateStylelintConfig(){
+      const filePath = api.resolve('./.stylelintrc.js')
+      const config = require(filePath)
+      
+      if(!config.rules){
+        config.rules = {}
+      }
 
-    //   fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8')
-    // }
+      config.rules['max-empty-lines'] = 2
+      config.rules['no-missing-end-of-source-newline'] = null
+      config.rules['no-empty-source'] = null
+
+      fs.writeFileSync(filePath, 'module.exports = ' + JSON.stringify(config, null, 2), 'utf-8')
+    },
+
+    createLandingConfig(){
+      const filePath = api.resolve('./landing.config.js')
+      const config = {
+        name: '',
+      }
+
+      fs.writeFileSync(filePath, `module.exports = ${JSON.stringify(config, null, 2)}`)
+    },
+
+    createLandingParamsJson(){
+      const filePath = api.resolve('./landing-params.json')
+      const config = {
+        account: 'prezzogiusto',
+        accountLogoMobile: "logo-prezzogiusto-small.svg",
+        accountLogo: "logo-prezzogiusto.svg",
+        privacy_1: "Richiedendo il servizio confermo di aver letto e accettato i <a href=https://www.prezzogiusto.com/termini-e-condizioni target=blank> Termini e Condizioni del Sito</a> e di aver preso visione dell'<a href=https://www.prezzogiusto.com/privacy/ target=blank> Informativa sul trattamento dei dati personali</a>. Non tutti i consensi sono obbligatori,",
+        privacy_2: "Confermo di dare il consenso al trattamento dei miei dati personali per le finalità di marketing di Smart Contact tramite telefonate automatizzate e modalità assimilate, quali e-mail, sms, mms, notifiche push, social media, nonché modalità tradizionali come posta cartacea e telefonate con operatore ai sensi del par. 2.2 (d) dell’Informativa (facoltativo).",
+        privacy_3: "Confermo di dare il consenso al trattamento dei miei dati personali per le finalità di profilazione ai sensi del par. 2.2 (e) dell’Informativa (facoltativo).",
+        privacy_4: "Confermo di dare il consenso al trattamento dei miei dati personali per la comunicazione a terzi per finalità di marketing tramite telefonate automatizzate e modalità assimilate, quali e-mail, sms, mms, notifiche push, social media, nonché modalità tradizionali come posta cartacea e telefonate con operatore ai sensi del par. 2.2 (f) dell’Informativa. (facoltativo)."
+      }
+
+      fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
+    }
   }
 }
