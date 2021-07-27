@@ -1,6 +1,6 @@
 {
   "name": "@smart-contact/vue-cli-plugin-landing-page",
-  "version": "0.4.3-alpha",
+  "version": "0.4.4-alpha",
   "main": "index.js",
   "repository": "https://github.com/smart-contact/vue-cli-plugin-landing-page.git",
   "license": "MIT",
