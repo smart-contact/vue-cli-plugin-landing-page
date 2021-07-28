@@ -6,6 +6,5 @@
   "license": "MIT",
   "scripts": {
     "release": "yarn publish --access public"
-  },
-  "dependencies": {}
+  }
 }
