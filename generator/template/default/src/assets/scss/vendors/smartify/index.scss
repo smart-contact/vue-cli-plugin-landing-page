@@ -1,14 +1,14 @@
 //base 
-@import "~@smart-contact/smartify/base/base";
+@import "~@smart-contact/smartify/src/scss/base/base";
 
 //utilities
-@import "~@smart-contact/smartify/base/utilities/image";
+@import "~@smart-contact/smartify/src/scss/base/utilities/image";
 
 //animations
-// @import "~@smart-contact/smartify/animations/fade";
+// @import "~@smart-contact/smartify/src/scss/animations/fade";
 
 //components
-@import "~@smart-contact/smartify/components/header-brands";
-@import "~@smart-contact/smartify/components/feature-box";
-// @import "~@smart-contact/smartify/components/forms/privacy";
-// @import "~@smart-contact/smartify/components/forms/call-me-back";
+@import "~@smart-contact/smartify/src/scss/layout/header-brands";
+@import "~@smart-contact/smartify/src/scss/components/feature-box";
+// @import "~@smart-contact/smartify/src/scss/components/forms/privacy";
+// @import "~@smart-contact/smartify/src/scss/components/forms/call-me-back";
