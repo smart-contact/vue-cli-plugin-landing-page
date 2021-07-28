@@ -23,6 +23,16 @@ module.exports = function(api){
       const filePath = api.resolve('./.stylelintrc.js')
       const config = require(filePath)
       
+      if(config.processors){
+
+        const processors = Object.fromEntries(config.processors)
+        if("@mapbox/stylelint-processor-arbitrary-tags" in processors){
+          processors["@mapbox/stylelint-processor-arbitrary-tags"].fileFilterRegex = ['\.vue$']
+        }
+
+        config.processors = processors
+      }
+
       if(!config.rules){
         config.rules = {}
       }
@@ -56,6 +66,6 @@ module.exports = function(api){
       }
 
       fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
-    }
+    },
   }
 }
