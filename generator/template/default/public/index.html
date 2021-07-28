@@ -24,7 +24,7 @@
             return {
               //functional
               // collection: { value: '{{ collection }}', default: '' },
-              // products: { value: JSON.parse('[{{ products }}]'), default: '1,2,3' },
+              // products: { value: {{ products }}, default: '1,2,3' },
               sap: { value: '{{ sap }}', default: '' },
               successURL: '{{ successURL }}',
               account: { value: '{{ account }}', default: 'prezzogiusto' },
@@ -54,23 +54,25 @@
           data(){
             return{
               //inserisci qui i dati di default da mandare in injection
-              sourcesMap: {
-                name: {
-                  id: '',
-                  token: ''
-                }
-              }
+              
             }
           },
 
           injection: {
             //injection options object
+            sourcesMap: {
+              name: {
+                id: '',
+                token: ''
+              }
+            }
           }
         },
         options: {
 
         },
         afterInit(landing){
+          landing.params.set('products', JSON.parse('[' + landing.params.get('products') + ']'))
           landing.mapParamsToData(['gclid as idorigine', 'f5', 'f11', 'f12', 'f13', 'f14', 'f15']);
           setSuccessURLParams(landing);
         }
