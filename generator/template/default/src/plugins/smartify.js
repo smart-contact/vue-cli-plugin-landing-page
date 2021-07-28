@@ -4,6 +4,7 @@ import {
   FeatureBox,
   // LeadModal,
   // CallMeBackFormPlugin,
+  $utils
 } from '@smart-contact/smartify'
 
 
@@ -17,7 +18,7 @@ const components = [
   // CallMeBackFormPlugin
 ]
 components.forEach(component => {
-  Vue.component(`s-${component.name}`, component)
+  Vue.component($utils.prefixComponentName(component.name), component)
 })
 
 //Plugins

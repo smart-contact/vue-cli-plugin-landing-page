@@ -24,11 +24,13 @@
             return {
               //functional
               // collection: { value: '{{ collection }}', default: '' },
-              // products: { value: JSON.parse('[{{ products }}]'), default: '1,2,3' },
+              // products: { value: {{ products }}, default: '1,2,3' },
               sap: { value: '{{ sap }}', default: '' },
               successURL: '{{ successURL }}',
               account: { value: '{{ account }}', default: 'prezzogiusto' },
-              
+              accountLogo: { value: '{{ accountLogo }}', default: 'prezzogiusto' },
+              accountLogoMobile: { value: '{{ accountLogoMobile }}', default: 'prezzogiusto' },
+
               //copy
               copyTitle: { value: '{{ copyTitle }}', default: '' },
               copySubtitle: { value: '{{ copySubtitle }}', default: '' },
@@ -54,21 +56,37 @@
           data(){
             return{
               //inserisci qui i dati di default da mandare in injection
+              
             }
           },
 
           injection: {
             //injection options object
+            sourcesMap: {
+              name: {
+                id: '',
+                token: ''
+              }
+            }
           }
         },
         options: {
 
         },
         afterInit(landing){
+          parseProductsToArray(landing)
           landing.mapParamsToData(['gclid as idorigine', 'f5', 'f11', 'f12', 'f13', 'f14', 'f15']);
           setSuccessURLParams(landing);
         }
       }
+
+      function parseProductsToArray(landing){
+        const { products: idList } = landing.params.get()
+        if(idList){
+          landing.params.set('products', JSON.parse('[' + idList + ']'))
+        }
+      }
+
 
       function setSuccessURLParams (landing){
         if(landing.params.get('successURL')){

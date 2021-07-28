@@ -12,7 +12,7 @@ module.exports = (api, options) => {
       .output
         .filename(buildFilenameTemplate('js'))
         .chunkFilename(buildFilenameTemplate('js'))
-        .publicPath('/')
+        .publicPath(process.env.NODE_ENV === 'production' ? `https://smart-contact-cdn.livelanding.it/${landingConfig.name}` : '/')
 
     webpackConfig.devtool('source-map')
     
@@ -28,7 +28,6 @@ module.exports = (api, options) => {
 
     //production only
     if(process.env.NODE_ENV === 'production'){
-      webpackConfig.output.publicPath(`https://smart-contact-cdn.livelanding.it/${landingConfig.name}`)
       webpackConfig.devtool(false)
 
       webpackConfig

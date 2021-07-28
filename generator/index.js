@@ -26,6 +26,7 @@ module.exports = function(api, options){
 
   utils.createLandingConfig()
   utils.createLandingParamsJson()
+  utils.cleanProject()
 
   //
   api.injectImports(api.entryFile, `import "@/plugins/smartland.js"`)
