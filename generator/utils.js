@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 module.exports = function(api){
   return {
 
@@ -24,13 +24,14 @@ module.exports = function(api){
       const config = require(filePath)
       
       if(config.processors){
-
         const processors = Object.fromEntries(config.processors)
+
         if("@mapbox/stylelint-processor-arbitrary-tags" in processors){
-          processors["@mapbox/stylelint-processor-arbitrary-tags"].fileFilterRegex = ['\.vue$']
+          processors["@mapbox/stylelint-processor-arbitrary-tags"].fileFilterRegex = ["\.vue$"]
         }
 
-        config.processors = processors
+
+        config.processors = Object.entries(processors)
       }
 
       if(!config.rules){
@@ -67,5 +68,18 @@ module.exports = function(api){
 
       fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
     },
+    cleanProject(){
+      const filesToRemove = [
+        api.resolve('./public/favicon.ico'),
+        api.resolve('./src/components/HelloWorld.vue'),
+        api.resolve('./src/assets/logo.png'),
+      ]
+
+      filesToRemove.forEach(filePath => {
+        if(fs.existsSync(filePath)){
+          fs.removeSync(filePath)
+        }
+      })
+    }
   }
 }
