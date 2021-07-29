@@ -8,6 +8,7 @@
     "release": "yarn publish --access public"
   },
   "devDependencies": {
+    "eslint": "^7.31.0",
     "fs-extra": "^10.0.0"
   }
 }
