@@ -8,15 +8,15 @@ module.exports = (api, options) => {
 
 	const buildFilenameTemplate = (ext) => `[name]-[hash:8].${ext}`
 
-	api.chainWebpack(webpackConfig => {
-		webpackConfig
+	api.chainWebpack(config => {
+		config
 			.output
 			.filename(buildFilenameTemplate("js"))
 			.chunkFilename(buildFilenameTemplate("js"))
         
-		webpackConfig.devtool("source-map")
+		config.devtool("source-map")
     
-		webpackConfig
+		config
 			.plugin("landing-params")
 			.use(LandingParamsPlugin, [
 				{
@@ -28,13 +28,13 @@ module.exports = (api, options) => {
 
 		//production only
 		if(process.env.NODE_ENV === "production"){
-			webpackConfig.output.publicPath = `${options.baseCdnUrl}/${landingConfig.name}` 
+			config.output.publicPath = `${options.baseCdnUrl}/${landingConfig.name}` 
 			
-			webpackConfig.devtool(false)
+			config.devtool(false)
 
 
 			//modify images
-			webpackConfig.module
+			config.module
 				.rule("images")
 				.use("url-loader")
 				.tap(args => {
@@ -42,7 +42,7 @@ module.exports = (api, options) => {
 					return args
 				})
         
-			webpackConfig.module
+			config.module
 				.rule("svg")
 				.use("file-loader")
 				.tap(args => {
@@ -50,7 +50,7 @@ module.exports = (api, options) => {
 					return args
 				})
 
-			webpackConfig.module
+			config.module
 				.rule("media")
 				.use("url-loader")
 				.tap(args => {
@@ -59,7 +59,7 @@ module.exports = (api, options) => {
 					return args
 				})
 
-			webpackConfig.module
+			config.module
 				.rule("fonts")
 				.use("url-loader")
 				.tap(args => {
@@ -68,8 +68,11 @@ module.exports = (api, options) => {
 					return args
 				})
 
+			//modify eslint
+			
+
 			//modify css
-			webpackConfig
+			config
 				.plugin("extract-css")
 				.tap(args => {
 					args[0].filename = buildFilenameTemplate("css")
@@ -78,7 +81,7 @@ module.exports = (api, options) => {
 				})
 			
 			//add images optimization
-			webpackConfig
+			config
 				.plugin("image-min")
 				.after("copy")
 				.use(ImageminPlugin, [
@@ -98,7 +101,7 @@ module.exports = (api, options) => {
 					}
 				])
 
-			webpackConfig
+			config
 				.plugin("zip-plugin")
 				.use(ZipWebpackPlugin, [
 					{
@@ -106,8 +109,7 @@ module.exports = (api, options) => {
 						exclude: [/\.html$/],
 						pathPrefix: landingConfig.name
 					}
-				])
-        
+				])   
 		}
 	})
 
