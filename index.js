@@ -2,7 +2,7 @@ const ZipWebpackPlugin = require("zip-webpack-plugin")
 const LandingParamsPlugin = require("@smart-contact/landing-params-webpack-plugin")
 const ImageminPlugin = require("imagemin-webpack-plugin").default
 
-module.exports = (api, options) => {
+module.exports = (api) => {
 	const landingConfig = require(api.resolve("./landing.config.js"))
 	const landingParams = require(api.resolve("./landing-params.json"))
 
@@ -28,10 +28,12 @@ module.exports = (api, options) => {
 
 		//production only
 		if(process.env.NODE_ENV === "production"){
-			config.output.publicPath = `${options.baseCdnUrl}/${landingConfig.name}` 
-			
-			config.devtool(false)
 
+			//config.output.publicPath('value') emits an error saying to not modify public path directly
+			//this is a workaround that changes the publicPath on the service instance (acts like it was in vue.config.js)
+			api.service.projectOptions.publicPath = `${landingConfig.cdnBaseURL}/${landingConfig.name}`
+
+			config.devtool(false)
 
 			//modify images
 			config.module
@@ -67,15 +69,6 @@ module.exports = (api, options) => {
 
 					return args
 				})
-
-			//modify eslint
-			config.plugin("stylelint").tap(args => {
-				args.files = [
-					"**/*.scss",
-					"**/*.vue"
-				]
-				return args
-			})
 
 			//modify css
 			config
@@ -118,6 +111,4 @@ module.exports = (api, options) => {
 				])   
 		}
 	})
-
-
 }
