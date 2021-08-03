@@ -69,7 +69,13 @@ module.exports = (api, options) => {
 				})
 
 			//modify eslint
-			
+			config.plugin("stylelint").tap(args => {
+				args.files = [
+					"**/*.scss",
+					"**/*.vue"
+				]
+				return args
+			})
 
 			//modify css
 			config
