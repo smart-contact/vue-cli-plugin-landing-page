@@ -25,6 +25,19 @@ module.exports = (api) => {
 			])
 			.after("html")
 
+		// if(config.plugins.has("stylelint")){
+		// 	config.plugins.delete("stylelint")
+		// }
+
+		config
+			.plugin("stylelint")
+			.tap(args => {
+				args[0].files = [
+					"src/**/*.{vue,htm,html,scss}"
+				]
+				return args
+			})
+
 
 		//production only
 		if(process.env.NODE_ENV === "production"){
@@ -109,7 +122,7 @@ module.exports = (api) => {
 						exclude: [/\.html$/],
 						pathPrefix: landingConfig.name
 					}
-				])   
+				])
 		}
 	})
 }
