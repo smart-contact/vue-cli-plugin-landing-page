@@ -2,21 +2,21 @@ const ZipWebpackPlugin = require("zip-webpack-plugin")
 const LandingParamsPlugin = require("@smart-contact/landing-params-webpack-plugin")
 const ImageminPlugin = require("imagemin-webpack-plugin").default
 
-module.exports = (api, options) => {
+module.exports = (api) => {
 	const landingConfig = require(api.resolve("./landing.config.js"))
 	const landingParams = require(api.resolve("./landing-params.json"))
 
 	const buildFilenameTemplate = (ext) => `[name]-[hash:8].${ext}`
 
-	api.chainWebpack(webpackConfig => {
-		webpackConfig
+	api.chainWebpack(config => {
+		config
 			.output
 			.filename(buildFilenameTemplate("js"))
 			.chunkFilename(buildFilenameTemplate("js"))
         
-		webpackConfig.devtool("source-map")
+		config.devtool("source-map")
     
-		webpackConfig
+		config
 			.plugin("landing-params")
 			.use(LandingParamsPlugin, [
 				{
@@ -25,16 +25,28 @@ module.exports = (api, options) => {
 			])
 			.after("html")
 
+		config
+			.plugin("stylelint")
+			.tap(args => {
+				args[0].files = [
+					"src/**/*.{vue,htm,html,scss}"
+				]
+				return args
+			})
+
 
 		//production only
 		if(process.env.NODE_ENV === "production"){
-			webpackConfig.output.publicPath = `${options.baseCdnUrl}/${landingConfig.name}` 
-			
-			webpackConfig.devtool(false)
+			console.warn("ASSICURATI DI AVER IMPOSTATO IL publicPath SU vue.config.js")
 
+			//config.output.publicPath('value') emits an error saying to not modify public path directly
+			//this is a workaround that changes the publicPath on the service instance (acts like it was in vue.config.js)
+			// api.service.projectOptions.publicPath = `${landingConfig.cdnBaseURL}/${landingConfig.name}`
+
+			config.devtool(false)
 
 			//modify images
-			webpackConfig.module
+			config.module
 				.rule("images")
 				.use("url-loader")
 				.tap(args => {
@@ -42,7 +54,7 @@ module.exports = (api, options) => {
 					return args
 				})
         
-			webpackConfig.module
+			config.module
 				.rule("svg")
 				.use("file-loader")
 				.tap(args => {
@@ -50,7 +62,7 @@ module.exports = (api, options) => {
 					return args
 				})
 
-			webpackConfig.module
+			config.module
 				.rule("media")
 				.use("url-loader")
 				.tap(args => {
@@ -59,7 +71,7 @@ module.exports = (api, options) => {
 					return args
 				})
 
-			webpackConfig.module
+			config.module
 				.rule("fonts")
 				.use("url-loader")
 				.tap(args => {
@@ -69,7 +81,7 @@ module.exports = (api, options) => {
 				})
 
 			//modify css
-			webpackConfig
+			config
 				.plugin("extract-css")
 				.tap(args => {
 					args[0].filename = buildFilenameTemplate("css")
@@ -78,7 +90,7 @@ module.exports = (api, options) => {
 				})
 			
 			//add images optimization
-			webpackConfig
+			config
 				.plugin("image-min")
 				.after("copy")
 				.use(ImageminPlugin, [
@@ -98,7 +110,7 @@ module.exports = (api, options) => {
 					}
 				])
 
-			webpackConfig
+			config
 				.plugin("zip-plugin")
 				.use(ZipWebpackPlugin, [
 					{
@@ -107,9 +119,6 @@ module.exports = (api, options) => {
 						pathPrefix: landingConfig.name
 					}
 				])
-        
 		}
 	})
-
-
 }
