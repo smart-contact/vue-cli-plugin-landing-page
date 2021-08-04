@@ -1,3 +1,4 @@
+const StylelintWebpackPlugin = require("stylelint-webpack-plugin")
 const ZipWebpackPlugin = require("zip-webpack-plugin")
 const LandingParamsPlugin = require("@smart-contact/landing-params-webpack-plugin")
 const ImageminPlugin = require("imagemin-webpack-plugin").default
@@ -27,11 +28,10 @@ module.exports = (api) => {
 
 		config
 			.plugin("stylelint")
-			.tap(args => {
-				args[0].files = [
-					"src/**/*.{vue,htm,html,scss}"
-				]
-				return args
+			.use(StylelintWebpackPlugin, {
+				context: api.resolve("./src"),
+				files: ["**/*.{vue,scss}"],
+				fix: true,
 			})
 
 
