@@ -5,25 +5,14 @@ module.exports = function(api, options){
 	api.render("./template/default")
   
 	//adding smart-contact packages + extra deps.
-	api.extendPackage({
-		dependencies: {
-			"@smart-contact/comparatore-api-service": "^2.x",
-			"@smart-contact/smartify": "^0.x",
-			// '@smart-contact/smartland': '^3.x',
-			"@smart-contact/landing-js": "^2.7.x",
-			"@smart-contact/validators": "^1.x",
-		},
-		devDependencies: {
-			"@smart-contact/landing-params-webpack-plugin": "^1.x",
-			"zip-webpack-plugin": "^4.x"
-		}
-	})
+	utils.extendsPackages()
+
+	utils.renderProductsStrategy(options.productsStrategy)
 
 	// create jsconfig.json
 	utils.createJSConfig()
 
 	//create landing.config.js & landing-params.json
-
 	const landingConfig = {
 		name: api.service.pkg.name,
 		cdnBaseURL: options.cdnBaseURL
@@ -33,8 +22,9 @@ module.exports = function(api, options){
 	utils.cleanProject()
 
 	//
-	api.injectImports(api.entryFile, "import \"@/plugins/smartland.js\"")
-	api.injectImports(api.entryFile, "import \"@/plugins/smartify.js\"")
+	api.injectImports(api.entryFile, "import \"./plugins/index\"")
+	api.injectImports(api.entryFile, "import \"./plugins/smartland\"")
+	api.injectImports(api.entryFile, "import \"./plugins/smartify\"")
 }
 
 module.exports.hooks = api => {

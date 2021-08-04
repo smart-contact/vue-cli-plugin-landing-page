@@ -1,6 +1,48 @@
 const fs = require("fs")
 module.exports = function(api){
 	return {
+		extendsPackages({ productsStrategy  = "composition"}){
+			const dependencies = {
+				"@smart-contact/comparatore-api-service": "^2.x",
+				"@smart-contact/smartify": "^0.x",
+				// '@smart-contact/smartland': '^3.x',
+				"@smart-contact/landing-js": "^2.7.x",
+				"@smart-contact/validators": "^1.x",
+				"vuelidate": "^0.7.x"
+			}
+			const devDependencies = {
+				"@smart-contact/landing-params-webpack-plugin": "^1.x",
+				"zip-webpack-plugin": "^4.x"
+			}
+
+
+
+			if(productsStrategy === "composition"){
+				dependencies["@vue/composition-api"] = "latest"
+			}
+
+			api.extendPackage({
+				dependencies,
+				devDependencies
+			})
+		},
+
+		renderProductsStrategy(strategy){
+			switch(strategy){
+			case "vuex-module":
+				//install vuex if not installed
+				//find the store/index.js file and add the products module
+				break
+			case "composition":
+			default:
+				//find smartify plugin file, add from /vue/composables useProducts
+				const pluginsFile = fs.readFileSync(api.resolve("/src/plugins/smartify.js"), "utf-8")
+				const lines = pluginsFile.split(/\r?\n/)
+				const injectLineIndex = lines.indexOf(`from '@smart-contact/smartify'`)
+				lines.splice(injectLineIndex, 0, '\t')
+				break
+			}
+		},
 
 		createJSConfig(){
 			const filepath = api.resolve("./jsconfig.json")
