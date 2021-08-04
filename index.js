@@ -28,10 +28,11 @@ module.exports = (api) => {
 
 		//production only
 		if(process.env.NODE_ENV === "production"){
+			console.warn("ASSICURATI DI AVER IMPOSTATO IL publicPath SU vue.config.js")
 
 			//config.output.publicPath('value') emits an error saying to not modify public path directly
 			//this is a workaround that changes the publicPath on the service instance (acts like it was in vue.config.js)
-			api.service.projectOptions.publicPath = `${landingConfig.cdnBaseURL}/${landingConfig.name}`
+			// api.service.projectOptions.publicPath = `${landingConfig.cdnBaseURL}/${landingConfig.name}`
 
 			config.devtool(false)
 
