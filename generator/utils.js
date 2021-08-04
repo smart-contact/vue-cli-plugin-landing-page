@@ -76,6 +76,15 @@ module.exports = function(api){
 					fs.unlinkSync(filePath)
 				}
 			})
+		},
+
+		disableFontawesome(){
+			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
+			const lines = main.split(/\r?\n/)
+			const importLineIndex = lines.indexOf("import \"./plugins/fontawesome\";")
+			lines[importLineIndex] = "//" + lines[importLineIndex]
+			
+			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
 		}
 	}
 }

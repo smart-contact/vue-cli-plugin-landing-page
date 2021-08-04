@@ -44,5 +44,6 @@ module.exports.hooks = api => {
 
 	api.afterInvoke(() => {
 		utils.updateStylelintConfig()
+		utils.disableFontawesome()
 	})
 }
