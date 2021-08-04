@@ -1,7 +1,6 @@
 module.exports = function(api, options){
 	const utils = require("./utils")(api)
 
-  
 	//adding smart-contact packages + extra deps.
 	api.extendPackage({
 		dependencies: {

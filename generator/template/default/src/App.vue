@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions } from "vuex";
 // import Hero from "@/components/Hero.vue";
 
 export default {
@@ -25,8 +25,7 @@ export default {
   },
 
   computed: {
-    ...mapState("products", { products: "items" }),
-    ...mapGetters("products", [ 'buyers' ]),
+    ...mapState("products", { products: "items", buyers: "buyers" }),
     accountLogo() {
       const { account, accountLogo, accountLogoMobile } = this.$landing.params.get();
       return [
