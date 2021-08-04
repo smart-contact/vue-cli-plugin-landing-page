@@ -41,6 +41,7 @@ module.exports = function(api){
 			config.rules["max-empty-lines"] = 2
 			config.rules["no-missing-end-of-source-newline"] = null
 			config.rules["no-empty-source"] = null
+			config.rules["number-leading-zero"] = null
 
 			fs.writeFileSync(filePath, "module.exports = " + JSON.stringify(config, null, 2), "utf-8")
 		},
@@ -64,6 +65,7 @@ module.exports = function(api){
 
 			fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
 		},
+
 		cleanProject(){
 			const filesToRemove = [
 				api.resolve("./public/favicon.ico"),
