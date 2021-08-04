@@ -1,4 +1,4 @@
-const fs = require("fs-extra")
+const fs = require("fs")
 module.exports = function(api){
 	return {
 
@@ -45,12 +45,8 @@ module.exports = function(api){
 			fs.writeFileSync(filePath, "module.exports = " + JSON.stringify(config, null, 2), "utf-8")
 		},
 
-		createLandingConfig(){
+		createLandingConfig(config = {name: ""}){
 			const filePath = api.resolve("./landing.config.js")
-			const config = {
-				name: "",
-			}
-
 			fs.writeFileSync(filePath, `module.exports = ${JSON.stringify(config, null, 2)}`)
 		},
 
@@ -77,7 +73,7 @@ module.exports = function(api){
 
 			filesToRemove.forEach(filePath => {
 				if(fs.existsSync(filePath)){
-					fs.removeSync(filePath)
+					fs.unlinkSync(filePath)
 				}
 			})
 		}

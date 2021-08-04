@@ -24,7 +24,11 @@ module.exports = function(api, options){
 
 	//create landing.config.js & landing-params.json
 
-	utils.createLandingConfig()
+	const landingConfig = {
+		name: api.service.pkg.name,
+		cdnBaseURL: options.cdnBaseURL
+	}
+	utils.createLandingConfig(landingConfig)
 	utils.createLandingParamsJson()
 	utils.cleanProject()
 

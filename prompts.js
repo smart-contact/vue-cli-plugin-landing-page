@@ -1,7 +1,7 @@
 module.exports = [
 	{
 		type: "text",
-		name: "baseCdnUrl",
+		name: "cdnBaseURL",
 		default: "https://smart-contact-cdn.livelanding.it"
 	}
 ]
