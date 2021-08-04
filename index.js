@@ -28,11 +28,13 @@ module.exports = (api) => {
 
 		config
 			.plugin("stylelint")
-			.use(StylelintWebpackPlugin, {
-				context: api.resolve("./src"),
-				files: ["**/*.{vue,scss}"],
-				fix: true,
-			})
+			.use(StylelintWebpackPlugin, [
+				{
+					context: api.resolve("./src"),
+					files: ["**/*.{vue,scss}"],
+					fix: true,
+				}
+			])
 
 
 		//production only
