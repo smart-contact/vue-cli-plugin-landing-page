@@ -19,29 +19,31 @@ module.exports = function(api){
 			fs.writeFileSync(filepath, JSON.stringify(config, null, 2), "utf-8")
 		},
 
-		updateStylelintConfig(){
+		createStylelintConfig(){
 			const filePath = api.resolve("./.stylelintrc.js")
-			const config = require(filePath)
-      
-			if(config.processors){
-				const processors = Object.fromEntries(config.processors)
-
-				if("@mapbox/stylelint-processor-arbitrary-tags" in processors){
-					processors["@mapbox/stylelint-processor-arbitrary-tags"].fileFilterRegex = ["\.vue$"]
+			const config = {
+				extends: "stylelint-config-recommended-scss",
+				rules: {
+					"selector-pseudo-element-no-unknown": [ true, { 
+						ignorePseudoElements: ["v-deep"] 
+					}],
+					"max-empty-lines": 2,
+					"no-missing-end-of-source-newline": null,
+					"no-empty-source": null,
+					"number-leading-zero": null,
 				}
-
-
-				config.processors = Object.entries(processors)
 			}
+      
+			// if(config.processors){
+			// 	const processors = Object.fromEntries(config.processors)
 
-			if(!config.rules){
-				config.rules = {}
-			}
+			// 	if("@mapbox/stylelint-processor-arbitrary-tags" in processors){
+			// 		processors["@mapbox/stylelint-processor-arbitrary-tags"].fileFilterRegex = ["\.vue$"]
+			// 	}
 
-			config.rules["max-empty-lines"] = 2
-			config.rules["no-missing-end-of-source-newline"] = null
-			config.rules["no-empty-source"] = null
-			config.rules["number-leading-zero"] = null
+
+			// 	config.processors = Object.entries(processors)
+			// }
 
 			fs.writeFileSync(filePath, "module.exports = " + JSON.stringify(config, null, 2), "utf-8")
 		},

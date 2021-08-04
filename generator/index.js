@@ -1,8 +1,6 @@
 module.exports = function(api, options){
 	const utils = require("./utils")(api)
 
-	//render template
-	api.render("./template/default")
   
 	//adding smart-contact packages + extra deps.
 	api.extendPackage({
@@ -24,18 +22,15 @@ module.exports = function(api, options){
 		}
 	})
 
-	// create jsconfig.json
-	utils.createJSConfig()
+	api.render("./template/default")
 
 	//create landing.config.js & landing-params.json
-	
 	const landingConfig = {
 		name: api.rootOptions.projectName,
 		cdnBaseURL: options.cdnBaseURL
 	}
 	utils.createLandingConfig(landingConfig)
 	utils.createLandingParamsJson()
-	utils.cleanProject()
 
 	//
 	api.injectImports(api.entryFile, "import \"@/plugins/index.js\"")
@@ -47,7 +42,9 @@ module.exports.hooks = api => {
 	const utils = require("./utils")(api)
 
 	api.afterInvoke(() => {
-		utils.updateStylelintConfig()
+		utils.cleanProject()
+		utils.createJSConfig()
+		utils.createStylelintConfig()
 		utils.disableFontawesome()
 	})
 }
