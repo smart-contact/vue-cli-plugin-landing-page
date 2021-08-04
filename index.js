@@ -25,10 +25,6 @@ module.exports = (api) => {
 			])
 			.after("html")
 
-		// if(config.plugins.has("stylelint")){
-		// 	config.plugins.delete("stylelint")
-		// }
-
 		config
 			.plugin("stylelint")
 			.tap(args => {
