@@ -12,6 +12,7 @@ module.exports = function(api, options){
 			// '@smart-contact/smartland': '^3.x',
 			"@smart-contact/landing-js": "^2.7.x",
 			"@smart-contact/validators": "^1.x",
+			"vuelidate": "^0.7.x"
 		},
 		devDependencies: {
 			"@smart-contact/landing-params-webpack-plugin": "^1.x",
@@ -23,12 +24,17 @@ module.exports = function(api, options){
 	utils.createJSConfig()
 
 	//create landing.config.js & landing-params.json
-
-	utils.createLandingConfig()
+	
+	const landingConfig = {
+		name: api.rootOptions.projectName,
+		cdnBaseURL: options.cdnBaseURL
+	}
+	utils.createLandingConfig(landingConfig)
 	utils.createLandingParamsJson()
 	utils.cleanProject()
 
 	//
+	api.injectImports(api.entryFile, "import \"@/plugins/index.js\"")
 	api.injectImports(api.entryFile, "import \"@/plugins/smartland.js\"")
 	api.injectImports(api.entryFile, "import \"@/plugins/smartify.js\"")
 }
@@ -38,5 +44,6 @@ module.exports.hooks = api => {
 
 	api.afterInvoke(() => {
 		utils.updateStylelintConfig()
+		utils.disableFontawesome()
 	})
 }

@@ -1,4 +1,4 @@
-const fs = require("fs-extra")
+const fs = require("fs")
 module.exports = function(api){
 	return {
 
@@ -41,16 +41,13 @@ module.exports = function(api){
 			config.rules["max-empty-lines"] = 2
 			config.rules["no-missing-end-of-source-newline"] = null
 			config.rules["no-empty-source"] = null
+			config.rules["number-leading-zero"] = null
 
 			fs.writeFileSync(filePath, "module.exports = " + JSON.stringify(config, null, 2), "utf-8")
 		},
 
-		createLandingConfig(){
+		createLandingConfig(config = {name: ""}){
 			const filePath = api.resolve("./landing.config.js")
-			const config = {
-				name: "",
-			}
-
 			fs.writeFileSync(filePath, `module.exports = ${JSON.stringify(config, null, 2)}`)
 		},
 
@@ -68,6 +65,7 @@ module.exports = function(api){
 
 			fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
 		},
+
 		cleanProject(){
 			const filesToRemove = [
 				api.resolve("./public/favicon.ico"),
@@ -77,9 +75,18 @@ module.exports = function(api){
 
 			filesToRemove.forEach(filePath => {
 				if(fs.existsSync(filePath)){
-					fs.removeSync(filePath)
+					fs.unlinkSync(filePath)
 				}
 			})
+		},
+
+		disableFontawesome(){
+			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
+			const lines = main.split(/\r?\n/)
+			const importLineIndex = lines.indexOf("import \"./plugins/fontawesome\";")
+			lines[importLineIndex] = "//" + lines[importLineIndex]
+			
+			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
 		}
 	}
 }

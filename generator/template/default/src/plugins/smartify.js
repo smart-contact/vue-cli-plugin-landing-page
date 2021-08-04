@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import { 
-  HeaderBrands,
   FeatureBox,
-  // LeadModal,
-  // CallMeBackFormPlugin,
+  HeaderBrands,
+  Footer,
   $utils
 } from '@smart-contact/smartify'
 
@@ -14,8 +13,7 @@ import {
 const components = [
   HeaderBrands,
   FeatureBox,
-  // LeadModal,
-  // CallMeBackFormPlugin
+  Footer
 ]
 components.forEach(component => {
   Vue.component($utils.prefixComponentName(component.name), component)
