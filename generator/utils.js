@@ -1,4 +1,6 @@
 const fs = require("fs")
+const { findLastIndex } = require("lodash")
+
 module.exports = function(api){
 	return {
 		extendsPackages({ productsStrategy  = "composition"}){
@@ -14,8 +16,6 @@ module.exports = function(api){
 				"@smart-contact/landing-params-webpack-plugin": "^1.x",
 				"zip-webpack-plugin": "^4.x"
 			}
-
-
 
 			if(productsStrategy === "composition"){
 				dependencies["@vue/composition-api"] = "latest"
@@ -34,13 +34,24 @@ module.exports = function(api){
 				//find the store/index.js file and add the products module
 				break
 			case "composition":
-			default:
-				//find smartify plugin file, add from /vue/composables useProducts
-				const pluginsFile = fs.readFileSync(api.resolve("/src/plugins/smartify.js"), "utf-8")
-				const lines = pluginsFile.split(/\r?\n/)
-				const injectLineIndex = lines.indexOf(`from '@smart-contact/smartify'`)
-				lines.splice(injectLineIndex, 0, '\t')
+			default: {
+				//find App.vue & add from /vue/composables useProducts
+
+				const AppFile = fs.readFileSync(api.resolve("/src/App.vue"), "utf-8")
+				const lines = AppFile.split(/\r?\n/)
+				const injectLineIndex = findLastIndex(lines, (line) => line.startsWith("import"))
+				lines.splice(injectLineIndex, 0, "\timport { useProducts } from \"@smart-contact/smartify/vue/composables\"")
+				
+				/**
+				 * export default {
+				 * 	setup(){
+				 * 		const { products, buyers, selectedProduct, setSelectedProductIndex } = usePorducts()
+				 * 		return { products, buyers, selectedProduct, setSelectedProductIndex }
+				 * 	}
+				 * }
+				 */
 				break
+			}
 			}
 		},
 

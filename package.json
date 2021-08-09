@@ -14,6 +14,7 @@
   "dependencies": {
     "glob-parent": "^3.1.0",
     "imagemin-webpack-plugin": "^2.4.2",
+    "lodash": "^4.17.21",
     "trim-newlines": "^3.0.1"
   }
 }
