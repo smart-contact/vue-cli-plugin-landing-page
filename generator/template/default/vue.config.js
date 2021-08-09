@@ -23,7 +23,7 @@ module.exports = {
 	},
 	productionSourceMap: false,
 	outputDir: "dist",
-	publicPath: IS_PRODUCTION ? `${landingConfig.cdnURL}/${landingConfig.name}` : "/",
+	publicPath: IS_PRODUCTION ? `${landingConfig.cdnBaseURL}/${landingConfig.name}` : "/",
 	css: {
 		loaderOptions: {
 			scss: {
