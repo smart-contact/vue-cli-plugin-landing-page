@@ -1,3 +1,4 @@
+const { merge } = require("lodash/object")
 const StylelintWebpackPlugin = require("stylelint-webpack-plugin")
 const ZipWebpackPlugin = require("zip-webpack-plugin")
 const LandingParamsPlugin = require("@smart-contact/landing-params-webpack-plugin")
@@ -25,17 +26,17 @@ module.exports = (api, options) => {
 	const buildFilenameTemplate = (ext) => `[name]-[hash:8].${ext}`
 
 
-	if(!options.css){
-		options.css = {
-			loaderOptions: {
-				scss: {}
-			}
-		}
-	}
 
 	//inject all variables/functions/mixins to all vue sfc components
-	options.css.loaderOptions = Object.assign(options.css.loaderOptions.scss, {
-		additionalData: [...scssGlobalImports, ""].join(";\n")
+	options.css = merge(options.css, {
+		loaderOptions: {
+			sass: {
+				additionalData: scssGlobalImports.join("\n")
+			},
+			scss: {
+				additionalData: [...scssGlobalImports, ""].join(";\n")
+			}
+		}
 	})
 
 	api.chainWebpack(config => {
