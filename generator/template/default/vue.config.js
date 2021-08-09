@@ -1,3 +1,5 @@
+const landingConfig = require("./landing.config.js")
+const IS_PRODUCTION = process.env.NODE_ENV === "production"
 const scssImports = [
 	"@import \"~bootstrap/scss/_functions.scss\"", //=====================|
 	"@import \"~@/assets/scss/vendors/bootstrap-vue/_custom.scss\"", //    |
@@ -21,6 +23,7 @@ module.exports = {
 	},
 	productionSourceMap: false,
 	outputDir: "dist",
+	publicPath: IS_PRODUCTION ? `${landingConfig.cdnURL}/${landingConfig.name}` : "/",
 	css: {
 		loaderOptions: {
 			scss: {
