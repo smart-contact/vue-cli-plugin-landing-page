@@ -3,11 +3,40 @@ const ZipWebpackPlugin = require("zip-webpack-plugin")
 const LandingParamsPlugin = require("@smart-contact/landing-params-webpack-plugin")
 const ImageminPlugin = require("imagemin-webpack-plugin").default
 
-module.exports = (api) => {
+const scssGlobalImports = [
+	"@import \"~bootstrap/scss/_functions.scss\"", //=====================|
+	"@import \"~@/assets/scss/vendors/bootstrap-vue/_custom.scss\"", //    |
+	"@import \"~bootstrap/scss/_variables.scss\"", //                     |---> Bootstrap Vars/functions/mixins
+	"@import \"~bootstrap/scss/_mixins.scss\"", //                        |
+	"@import \"~bootstrap-vue/src/_variables.scss\"", //==================|
+	"@import \"~@smart-contact/smartify/src/scss/_functions.scss\"", //========|
+	"@import \"~@/assets/scss/vendors/smartify/_custom.scss\"", //              |---> Smartify Vars/Functions/mixins
+	"@import \"~@smart-contact/smartify/src/scss/_variables.scss\"", //        |
+	"@import \"~@smart-contact/smartify/src/scss/mixins/_layout.scss\"", //====|
+	"@import \"~@/assets/scss/abstracts/_functions.scss\"", //==================|
+	"@import \"~@/assets/scss/abstracts/_variables.scss\"", //                  |---> App vars/functions/mixins
+	"@import \"~@/assets/scss/abstracts/_mixins.scss\";", //=====================|
+]
+
+module.exports = (api, options) => {
 	const landingConfig = require(api.resolve("./landing.config.js"))
 	const landingParams = require(api.resolve("./landing-params.json"))
 
 	const buildFilenameTemplate = (ext) => `[name]-[hash:8].${ext}`
+
+
+	if(!options.css){
+		options.css = {
+			loaderOptions: {
+				scss: {}
+			}
+		}
+	}
+
+	//inject all variables/functions/mixins to all vue sfc components
+	options.css.loaderOptions = Object.assign(options.css.loaderOptions.scss, {
+		additionalData: [...scssGlobalImports, ""].join(";\n")
+	})
 
 	api.chainWebpack(config => {
 		config
@@ -17,6 +46,7 @@ module.exports = (api) => {
         
 		config.devtool("source-map")
     
+		//add landing-params plugin
 		config
 			.plugin("landing-params")
 			.use(LandingParamsPlugin, [
@@ -26,6 +56,7 @@ module.exports = (api) => {
 			])
 			.after("html")
 
+		//add stylelint plugin
 		config
 			.plugin("stylelint")
 			.use(StylelintWebpackPlugin, [
@@ -39,12 +70,6 @@ module.exports = (api) => {
 
 		//production only
 		if(process.env.NODE_ENV === "production"){
-			console.warn("ASSICURATI DI AVER IMPOSTATO IL publicPath SU vue.config.js")
-
-			//config.output.publicPath('value') emits an error saying to not modify public path directly
-			//this is a workaround that changes the publicPath on the service instance (acts like it was in vue.config.js)
-			// api.service.projectOptions.publicPath = `${landingConfig.cdnBaseURL}/${landingConfig.name}`
-
 			config.devtool(false)
 
 			//modify images
