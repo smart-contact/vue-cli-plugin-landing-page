@@ -14,9 +14,6 @@ const scssGlobalImports = [
 	"@import \"~@/assets/scss/vendors/smartify/_custom.scss\"", //              |---> Smartify Vars/Functions/mixins
 	"@import \"~@smart-contact/smartify/src/scss/_variables.scss\"", //        |
 	"@import \"~@smart-contact/smartify/src/scss/mixins/_layout.scss\"", //====|
-	"@import \"~@/assets/scss/abstracts/_functions.scss\"", //==================|
-	"@import \"~@/assets/scss/abstracts/_variables.scss\"", //                  |---> App vars/functions/mixins
-	"@import \"~@/assets/scss/abstracts/_mixins.scss\";", //=====================|
 ]
 
 module.exports = (api, options) => {

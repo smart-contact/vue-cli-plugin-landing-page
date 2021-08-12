@@ -43,10 +43,11 @@ export default {
     },
 
     buyerLogo() {
-      return {
-        src: this.buyers[0].imageUrl,
-        alt: `logo ${this.buyers[0].name}`,
-      };
+      const [buyer] = this.buyers
+      return buyer ? {
+        src: buyer.imageUrl,
+        alt: `logo ${buyer.name}`,
+      } : {};
     },
   },
 

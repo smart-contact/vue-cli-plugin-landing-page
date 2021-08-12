@@ -24,7 +24,7 @@
             return {
               //functional
               // collection: { value: '{{ collection }}', default: '' },
-              // products: { value: '{{ products }}', default: '1,2,3' },
+              // products: { value: '{{ products }}', default: '1,2,3', parser: value => JSON.parse(`[${value}]`) },
               sap: { value: '{{ sap }}', default: '' },
               successURL: '{{ successURL }}',
               account: { value: '{{ account }}', default: 'prezzogiusto' },
@@ -61,9 +61,8 @@
           },
 
           injection: {
-            //injection options object
-            sourcesMap: {
-              name: {
+            smartBridge: {
+              sourceOptions:  {
                 id: '',
                 token: ''
               }
@@ -74,16 +73,8 @@
 
         },
         afterInit(landing){
-          parseProductsToArray(landing)
           landing.mapParamsToData(['gclid as idorigine', 'f5', 'f11', 'f12', 'f13', 'f14', 'f15']);
           setSuccessURLParams(landing);
-        }
-      }
-
-      function parseProductsToArray(landing){
-        const { products: idList } = landing.params.get()
-        if(idList){
-          landing.params.set('products', JSON.parse('[' + idList + ']'))
         }
       }
 

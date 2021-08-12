@@ -1,12 +1,22 @@
-import Vue from 'vue'
-// import { LandingVuePlugin } from '@smart-contact/smartland'
-import LandingVuePlugin from '@smart-contact/landing-js/vue/VueLandingPlugin.js'
+import Vue from "vue";
+import { SmartlandVuePlugin } from "@smart-contact/smartland";
+import SmartlandPluginSmartBridge from "@smart-contact/smartland-plugin-smart-bridge";
 
-Vue.use(LandingVuePlugin, window.$landingConfig)
-// const { config = {}, options = {}, afterInit}
-// Vue.use(LandingVuePlugin, {
-//   config,
-//   options,
-//   plugins: [],
-//   afterInit
-// })
+const { config = {}, options = {},  afterInit } = window.$landingConfig
+const {  params = {},  data = {}, injection = {} } = config
+
+const plugins = [
+  [SmartlandPluginSmartBridge, injection.smartBridge || {}]
+];
+
+Vue.use(SmartlandVuePlugin, {
+  config: {
+    params,
+    data
+  },
+  options,
+
+  plugins,
+
+  afterInit
+});
