@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import products from '@smart-contact/smartify/src/vue/vuex-modules/products.js'
+import products from '@smart-contact/smartify/src/vue/vuex-modules/products'
 
 Vue.use(Vuex);
 
