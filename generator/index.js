@@ -4,7 +4,7 @@ module.exports = function(api, options){
 	//adding smart-contact packages + extra deps.
 	api.extendPackage({
 		dependencies: {
-			"@smart-contact/comparatore-api-service": "^2.4.1",
+			"@smart-contact/comparatore-api-service": "^2.5.x",
 			"@smart-contact/smartify": "^0.x",
 			"@smart-contact/smartland": "^3.x",
 			"@smart-contact/smartland-plugin-smart-bridge": "^0.x",
