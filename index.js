@@ -13,7 +13,7 @@ const scssGlobalImports = [
 	"@import \"~@smart-contact/smartify/src/scss/_functions.scss\"", //========|
 	"@import \"~@/assets/scss/vendors/smartify/_custom.scss\"", //              |---> Smartify Vars/Functions/mixins
 	"@import \"~@smart-contact/smartify/src/scss/_variables.scss\"", //        |
-	"@import \"~@smart-contact/smartify/src/scss/mixins/_layout.scss\"", //====|
+	"@import \"~@smart-contact/smartify/src/scss/mixins/index.scss\"", //====|
 ]
 
 module.exports = (api, options) => {
