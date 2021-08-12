@@ -16,12 +16,12 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-// import Hero from "@/components/Hero.vue";
+// import AppHero from "@/components/AppHero.vue";
 
 export default {
   name: "App",
   components: {
-    // Hero,
+    // AppHero,
   },
 
   computed: {
@@ -58,7 +58,7 @@ export default {
     this.loadProducts({
       // collection: this.$landing.params.get('collection'),
       // getBuyers: false
-      productIds: this.$landing.params.get("products")
+      productsIds: this.$landing.params.get("products")
     });
   },
 };

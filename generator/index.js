@@ -6,8 +6,8 @@ module.exports = function(api, options){
 		dependencies: {
 			"@smart-contact/comparatore-api-service": "^2.4.1",
 			"@smart-contact/smartify": "^0.x",
-			// '@smart-contact/smartland': '^3.x',
-			"@smart-contact/landing-js": "^2.7.3",
+			"@smart-contact/smartland": "^3.x",
+			//"@smart-contact/landing-js": "^2.7.3",
 			"@smart-contact/validators": "^1.1.0",
 			"vuelidate": "^0.7.x"
 		},
