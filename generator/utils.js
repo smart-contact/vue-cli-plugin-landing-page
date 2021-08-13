@@ -89,6 +89,19 @@ module.exports = function(api){
 			lines[importLineIndex] = "//" + lines[importLineIndex]
 			
 			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
+		},
+
+		injectImports(){
+			const main = fs.readFileSync(api.entryFile, "utf-8")
+			const lines = main.split("/r?/n")
+			
+			//insert after Vue import
+			let index = lines.findIndex(line => line.includes("vue"))
+			lines.splice(index, 0, "import \"@/plugins/index.js\"")
+
+			//insert after bootstrap-vue import
+			index = lines.findIndex(line => line.includes("bootstrap-vue"))
+			lines.splice(index, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
 		}
 	}
 }

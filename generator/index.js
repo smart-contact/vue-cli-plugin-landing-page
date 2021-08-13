@@ -33,9 +33,7 @@ module.exports = function(api, options){
 	utils.createLandingParamsJson()
 
 	//
-	api.injectImports(api.entryFile, "import \"@/plugins/index.js\"")
-	api.injectImports(api.entryFile, "import \"@/plugins/smartland.js\"")
-	api.injectImports(api.entryFile, "import \"@/plugins/smartify.js\"")
+	utils.injectImports()
 }
 
 module.exports.hooks = api => {
