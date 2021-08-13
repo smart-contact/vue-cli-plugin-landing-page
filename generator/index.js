@@ -32,6 +32,7 @@ module.exports = function(api, options){
 	utils.createLandingConfig(landingConfig)
 	utils.createLandingParamsJson()
 
+	utils.injectImports()
 	//
 }
 
@@ -43,6 +44,5 @@ module.exports.hooks = api => {
 		utils.createJSConfig()
 		utils.createStylelintConfig()
 		utils.disableFontawesome()
-		utils.injectImports()
 	})
 }

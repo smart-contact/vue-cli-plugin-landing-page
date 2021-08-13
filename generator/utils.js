@@ -92,7 +92,7 @@ module.exports = function(api){
 		},
 
 		injectImports(){
-			const main = fs.readFileSync(api.entryFile, "utf-8")
+			const main = fs.readFileSync(api.resolve(api.entryFile), "utf-8")
 			const lines = main.split("/r?/n")
 			
 			//insert after Vue import
