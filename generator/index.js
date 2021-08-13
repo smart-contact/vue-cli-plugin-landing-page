@@ -32,10 +32,10 @@ module.exports = function(api, options){
 	utils.createLandingConfig(landingConfig)
 	utils.createLandingParamsJson()
 
-	api.injectImports(api.entryFile, "@import \"@/plugins\"")
-	api.injectImports(api.entryFile, "@import \"@/plugins/smartland\"")
-	api.injectImports(api.entryFile, "@import \"@/plugins/smartify\"")
 	//
+	api.injectImports(api.entryFile, "import \"@/plugins/index.js\"")
+	api.injectImports(api.entryFile, "import \"@/plugins/smartland.js\"")
+	api.injectImports(api.entryFile, "import \"@/plugins/smartify.js\"")
 }
 
 module.exports.hooks = api => {
