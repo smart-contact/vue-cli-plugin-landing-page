@@ -32,7 +32,9 @@ module.exports = function(api, options){
 	utils.createLandingConfig(landingConfig)
 	utils.createLandingParamsJson()
 
-	utils.injectImports()
+	api.injectImports(api.entryFile, "@import \"@/plugins\"")
+	api.injectImports(api.entryFile, "@import \"@/plugins/smartland\"")
+	api.injectImports(api.entryFile, "@import \"@/plugins/smartify\"")
 	//
 }
 

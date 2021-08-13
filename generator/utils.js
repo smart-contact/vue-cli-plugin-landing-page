@@ -91,7 +91,7 @@ module.exports = function(api){
 			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
 		},
 
-		injectImports(){
+	/* 	injectImports(){
 			const main = fs.readFileSync(api.resolve(api.entryFile), "utf-8")
 			const lines = main.split("/r?/n")
 			
@@ -104,6 +104,6 @@ module.exports = function(api){
 			lines.splice(index, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
 			
 			fs.writeFileSync(api.entryFile, lines.join("\n"))
-		}
-	}
+		}*/
+	} 
 }
