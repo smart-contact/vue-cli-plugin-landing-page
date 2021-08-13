@@ -102,6 +102,8 @@ module.exports = function(api){
 			//insert after bootstrap-vue import
 			index = lines.findIndex(line => line.includes("bootstrap-vue"))
 			lines.splice(index, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
+			
+			fs.writeFileSync(api.entryFile, lines.join("\n"))
 		}
 	}
 }
