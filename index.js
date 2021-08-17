@@ -105,6 +105,12 @@ module.exports = (api, options) => {
 					return args
 				})
 
+			config.plugin("html")
+				.tap(args => {
+					args[0].minify = false
+					return args
+				})
+				
 			//modify css
 			config
 				.plugin("extract-css")
@@ -114,24 +120,13 @@ module.exports = (api, options) => {
 					return args
 				})
 			
-			//add images optimization
+			// add images optimization
 			config
 				.plugin("image-min")
 				.after("copy")
 				.use(ImageminPlugin, [
 					{
 						test: /\.(jpe?g|png|gif|svg)$/i,
-						jpegtran: {
-							progressive: true,
-							arithmetic: true
-						},
-						optipng: {
-							optimizationLevel: 4
-						},
-						gifsicle: {
-							optimizationLevel: 4
-						},
-						svgo: {}
 					}
 				])
 
