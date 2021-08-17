@@ -85,14 +85,14 @@ module.exports = function(api){
 		disableFontawesome(){
 			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
 			const lines = main.split(/\r?\n/)
-			const importLineIndex = lines.indexOf("import \"./plugins/fontawesome\";")
+			const importLineIndex = lines.findIndexOf(line => line.includes("fontawesome"))
 			lines[importLineIndex] = "//" + lines[importLineIndex]
 			
 			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
 		},
 
 		injectImports(){
-			const main = fs.readFileSync(api.entryFile, "utf-8")
+			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
 			const lines = main.split("/r?/n")
 			
 			//insert after Vue import
@@ -103,7 +103,7 @@ module.exports = function(api){
 			index = lines.findIndex(line => line.includes("bootstrap-vue"))
 			lines.splice(index, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
 			
-			fs.writeFileSync(api.entryFile, lines.join("\n"))
+			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
 		}
 	}
 }
