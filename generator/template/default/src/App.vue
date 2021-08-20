@@ -5,9 +5,18 @@
       :left-logo="buyerLogo" 
       :right-logo="accountLogo" />
 
+  <%_ if(useProductsVuexModule) {_%>
     <b-overlay :show="products.loading" spinner-variant="primary">
+  <%_ } else { _%>
+    <b-overlay :show="products.loading.value" spinner-variant="primary">
+  <%_ } _%>
       <template #overlay="{ spinnerVariant }">
-        <overlay-loading-screen :logo="accountLogo" :spinner-variant="spinnerVariant" />
+        <div class="container">
+            <overlay-loading-screen
+              :logo="accountLogo[0]"
+              :spinner-variant="spinnerVariant"
+            />
+        </div>
       </template>
 
       <template>
@@ -24,14 +33,22 @@
       <span v-html="$landing.params.get('copyFooter')" />
     </s-footer>
 
-    <s-call-me-back-modal />
+    <s-call-me-back-modal id="call-me-back-modal" />
   </div>
 </template>
 
 <script>
+<%_ if(useProductsVuexModule) {_%>
 import { mapState, mapActions } from "vuex";
-import OverlayLoadingScreen from '@/components/OverlayLoadingScreen'
+<%_ } _%>
+import { 
+<%_ if(!useProductsVuexModule) {_%>
+  useProducts,
+<%_ } _%>
+  useLead
+} from '@smart-contact/smartify/src/vue/composables'
 
+import OverlayLoadingScreen from '@/components/OverlayLoadingScreen'
 // import AppHero from "@/components/AppHero.vue";
 const SCallMeBackModal = () => import(
     /* webpackChunkName: "call-me-back-modal" */
@@ -46,8 +63,33 @@ export default {
     SCallMeBackModal
   },
 
+  setup(props, { parent }){
+    const lead = useLead(parent.$landing)
+  <%_ if(!useProductsVuexModule) {_%>
+    const products = useProducts()
+  <%_ } _%>
+
+    return {
+    <%_ if(!useProductsVuexModule) {_%>
+      products,
+    <%_ } _%>
+      lead
+    }
+  }
+
+<%_ if(!useProductsVuexModule) {_%>
+  setup(){
+
+    return {
+      products
+    }
+  }
+<%_ }_%>
+
   computed: {
+  <%_ if(useProductsVuexModule) {_%>
     ...mapState("products", { products: "items", buyers: "buyers" }),
+  <%_ } _%>
     accountLogo() {
       const { account, accountLogo, accountLogoMobile } = this.$landing.params.get();
       return [
@@ -65,7 +107,12 @@ export default {
     },
 
     buyerLogo() {
+    <%_ if(useProductsVuexModule) {_%>
       const [buyer] = this.buyers
+    <%_ } else { _%>
+      const [buyer] = this.products.buyers
+    <%_ } _%>
+
       return buyer ? {
         src: buyer.imageUrl,
         alt: `logo ${buyer.name}`,
@@ -74,15 +121,25 @@ export default {
   },
 
   methods: {
+  <%_ if(useProductsVuexModule) {_%>
     ...mapActions("products", ["loadProducts"]),
+  <%_ } _%>
   },
 
   created() {
+  <%_ if(useProductsVuexModule) {_%>
     this.loadProducts({
       // collection: this.$landing.params.get('collection'),
       // getBuyers: false
       productsIds: this.$landing.params.get("products")
     });
+  <%_ } else { _%>
+    this.products.load({
+       // collection: this.$landing.params.get('collection'),
+      // getBuyers: false
+      productsIds: this.$landing.params.get("products")
+    })
+  <%_ } _%>
   },
 };
 </script>
@@ -90,4 +147,14 @@ export default {
 <style lang="scss">
 @import "~@/assets/scss/vendors/bootstrap-vue/index";
 @import "~@/assets/scss/vendors/smartify/index";
+
+#app{
+  .b-overlay{
+    min-height: calc(100vh - #{$s-header-brands-logo-height + (spacer(5) * 2)});
+
+    div:nth-child(2){
+      width: 100%;
+    }
+  }
+}
 </style>
