@@ -1,23 +1,24 @@
 const fs = require("fs")
+
 module.exports = function(api){
 	return {
 
-		createJSConfig(){
-			const filepath = api.resolve("./jsconfig.json")
+		// createJSConfig(){
+		// 	const filepath = api.resolve("./jsconfig.json")
 
-			const config = {
-				"compilerOptions": {
-					"baseUrl": ".",
-					"paths": {
-						"@/*": [
-							"src/*"
-						]
-					}
-				}
-			}
+		// 	const config = {
+		// 		"compilerOptions": {
+		// 			"baseUrl": ".",
+		// 			"paths": {
+		// 				"@/*": [
+		// 					"src/*"
+		// 				]
+		// 			}
+		// 		}
+		// 	}
 
-			fs.writeFileSync(filepath, JSON.stringify(config, null, 2), "utf-8")
-		},
+		// 	fs.writeFileSync(filepath, JSON.stringify(config, null, 2), "utf-8")
+		// },
 
 		createStylelintConfig(){
 			const filePath = api.resolve("./.stylelintrc.js")
@@ -33,17 +34,6 @@ module.exports = function(api){
 					"number-leading-zero": null,
 				}
 			}
-      
-			// if(config.processors){
-			// 	const processors = Object.fromEntries(config.processors)
-
-			// 	if("@mapbox/stylelint-processor-arbitrary-tags" in processors){
-			// 		processors["@mapbox/stylelint-processor-arbitrary-tags"].fileFilterRegex = ["\.vue$"]
-			// 	}
-
-
-			// 	config.processors = Object.entries(processors)
-			// }
 
 			fs.writeFileSync(filePath, "module.exports = " + JSON.stringify(config, null, 2), "utf-8")
 		},
@@ -80,15 +70,6 @@ module.exports = function(api){
 					fs.unlinkSync(filePath)
 				}
 			})
-		},
-
-		disableFontawesome(){
-			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
-			const lines = main.split(/\r?\n/)
-			const importLineIndex = lines.findIndex(line => line.includes("fontawesome"))
-			lines[importLineIndex] = "//" + lines[importLineIndex]
-			
-			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
 		},
 
 		injectImports(){
