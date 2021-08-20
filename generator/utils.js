@@ -1,24 +1,26 @@
 const fs = require("fs")
 
+class File {
+	constructor(filePath){
+		this._splitter = /\r?\n/
+		this.filePath = filePath
+		this.file = fs.readFileSync(this.filePath, "utf-8")
+		this.lines = this.file.split(this._splitter)
+	}
+
+	editLines(callback){
+		callback(this.lines)
+		this.file = this.lines.join("\n")
+	}
+
+	save(){
+		fs.writeFileSync(this.filePath, this.file, "utf-8")
+	}
+}
+
 module.exports = function(api){
+
 	return {
-
-		// createJSConfig(){
-		// 	const filepath = api.resolve("./jsconfig.json")
-
-		// 	const config = {
-		// 		"compilerOptions": {
-		// 			"baseUrl": ".",
-		// 			"paths": {
-		// 				"@/*": [
-		// 					"src/*"
-		// 				]
-		// 			}
-		// 		}
-		// 	}
-
-		// 	fs.writeFileSync(filepath, JSON.stringify(config, null, 2), "utf-8")
-		// },
 
 		createStylelintConfig(){
 			const filePath = api.resolve("./.stylelintrc.js")
@@ -61,30 +63,43 @@ module.exports = function(api){
 
 		cleanProject(){
 			const filesToRemove = [
-				"public/favicon.ico",
-				"src/components/HelloWorld.vue",
-				"src/assets/logo.png",
+				api.resolve("./public/favicon.ico"),
+				api.resolve("./src/components/HelloWorld.vue"),
+				api.resolve("./src/assets/logo.png"),
 			]
 
-			api.render(files => {
-				filesToRemove.forEach(filename => delete files[filename])
+			filesToRemove.forEach(filePath => {
+				if(fs.existsSync(filePath)){
+					fs.unlinkSync(filePath)
+				}
 			})
 		},
 
 		injectImports(){
-			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
-			const lines = main.split(/\r?\n/)
-			
-			//insert after Vue import
-			let index = lines.findIndex(line => line.includes("vue"))
-			console.log({index})
-			lines.splice(index + 1, 0, "import \"@/plugins/index.js\"")
+			const mainFile = new File(api.resolve("src/main.js"))
 
-			//insert after bootstrap-vue import
-			index = lines.findIndex(line => line.includes("bootstrap-vue"))
-			lines.splice(index + 1, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
+			mainFile.editLines((lines) => {
+				//insert after Vue import
+				let index = lines.findIndex(line => line.includes("vue"))
+				lines.splice(index + 1, 0, "import \"@/plugins/index.js\"")
+
+				//insert after bootstrap-vue import
+				index = lines.findIndex(line => line.includes("bootstrap-vue"))
+				lines.splice(index + 1, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
+			})
 			
-			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
+			mainFile.save()
+		},
+
+		updateEslintConfig(){
+			const file = new File(api.resolve("./.eslintrc.js"))
+
+			file.editLines(lines => {
+				const index = lines.findIndex(line => line.includes("parser: \"@babel/eslint-parser\""))
+				lines.splice(index + 1, 0, "\t\trequireConfigFile: false,")
+			})
+
+			file.save()
 		}
 	}
 }
