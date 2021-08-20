@@ -4,24 +4,46 @@
       class="py-5"
       :left-logo="buyerLogo" 
       :right-logo="accountLogo" />
-    <!-- <app-hero /> -->
 
-    <main class="py-6">
+    <b-overlay :show="products.loading" spinner-variant="primary">
+      <template #overlay="{ spinnerVariant }">
+        <overlay-loading-screen :logo="accountLogo" :spinner-variant="spinnerVariant" />
+      </template>
 
-    </main>
+      <template>
+        <!-- <app-hero /> -->
 
-    <s-footer class="py-7"/>
+        <main class="py-6">
+
+        </main>
+      </template>
+    </b-overlay>
+    
+
+    <s-footer class="py-5 text-center">
+      <span v-html="$landing.params.get('copyFooter')" />
+    </s-footer>
+
+    <s-call-me-back-modal />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
+import OverlayLoadingScreen from '@/components/OverlayLoadingScreen'
+
 // import AppHero from "@/components/AppHero.vue";
+const SCallMeBackModal = () => import(
+    /* webpackChunkName: "call-me-back-modal" */
+    '@smart-contact/smartify/src/vue/components/modals/CallMeBackModal.vue'
+  );
 
 export default {
   name: "App",
   components: {
+    OverlayLoadingScreen,
     // AppHero,
+    SCallMeBackModal
   },
 
   computed: {
