@@ -33,7 +33,11 @@
       <span v-html="$landing.params.get('copyFooter')" />
     </s-footer>
 
-    <s-call-me-back-modal id="call-me-back-modal" />
+    <s-call-me-back-modal id="call-me-back-modal" 
+      :cmb-form-loading="lead.sending.value"
+      @hide="onCallMeBackModalHide"
+      @submit="lead.send"
+    />
   </div>
 </template>
 
@@ -75,16 +79,7 @@ export default {
     <%_ } _%>
       lead
     }
-  }
-
-<%_ if(!useProductsVuexModule) {_%>
-  setup(){
-
-    return {
-      products
-    }
-  }
-<%_ }_%>
+  },
 
   computed: {
   <%_ if(useProductsVuexModule) {_%>
@@ -124,6 +119,9 @@ export default {
   <%_ if(useProductsVuexModule) {_%>
     ...mapActions("products", ["loadProducts"]),
   <%_ } _%>
+    onCallMeBackModalHide(){
+      this.$landing.data.restoreDefaults()
+    },
   },
 
   created() {
@@ -145,7 +143,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/assets/scss/vendors/bootstrap-vue/index";
 @import "~@/assets/scss/vendors/smartify/index";
 
 #app{
