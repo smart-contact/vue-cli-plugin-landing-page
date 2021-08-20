@@ -15,6 +15,7 @@ module.exports = [
 		default: false	
 	},
 	{
+		when: ({useVuex}) => useVuex,
 		type: "confirm",
 		name: "useProductsVuexModule",
 		default: false,
