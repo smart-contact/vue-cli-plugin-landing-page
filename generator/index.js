@@ -1,5 +1,5 @@
-const routerGenerator = "@vue/cli-plugin-router/generator"
-const vuexGenerator = "@vue/cli-plugin-vuex/generator"
+const routerGenerator = require("@vue/cli-plugin-router/generator")
+const vuexGenerator = require("@vue/cli-plugin-vuex/generator")
 
 module.exports = function(api, options){
 	const utils = require("./utils")(api)
