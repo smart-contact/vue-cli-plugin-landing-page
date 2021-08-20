@@ -39,7 +39,7 @@ module.exports = function(api, options){
 	}
 
 	api.render("./template/default", {
-		productsImplementationMode: options.useProductsVuexModule ? "vuex" : "composition"
+		useProductsVuexModule: options.useProductsVuexModule
 	})
 
 	//create landing.config.js & landing-params.json
@@ -49,8 +49,6 @@ module.exports = function(api, options){
 	}
 	utils.createLandingConfig(landingConfig)
 	utils.createLandingParamsJson()
-
-	//
 }
 
 module.exports.hooks = api => {
