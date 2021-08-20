@@ -85,7 +85,7 @@ module.exports = function(api){
 		disableFontawesome(){
 			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
 			const lines = main.split(/\r?\n/)
-			const importLineIndex = lines.findIndexOf(line => line.includes("fontawesome"))
+			const importLineIndex = lines.findIndex(line => line.includes("fontawesome"))
 			lines[importLineIndex] = "//" + lines[importLineIndex]
 			
 			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
@@ -93,15 +93,16 @@ module.exports = function(api){
 
 		injectImports(){
 			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
-			const lines = main.split("/r?/n")
+			const lines = main.split(/\r?\n/)
 			
 			//insert after Vue import
 			let index = lines.findIndex(line => line.includes("vue"))
-			lines.splice(index, 0, "import \"@/plugins/index.js\"")
+			console.log({index})
+			lines.splice(index + 1, 0, "import \"@/plugins/index.js\"")
 
 			//insert after bootstrap-vue import
 			index = lines.findIndex(line => line.includes("bootstrap-vue"))
-			lines.splice(index, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
+			lines.splice(index + 1, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
 			
 			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
 		}
