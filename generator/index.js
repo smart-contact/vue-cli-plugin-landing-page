@@ -58,9 +58,7 @@ module.exports.hooks = api => {
 
 	api.afterInvoke(() => {
 		utils.cleanProject()
-		utils.createJSConfig()
 		utils.createStylelintConfig()
-		utils.disableFontawesome()
 		utils.injectImports()
 	})
 }
