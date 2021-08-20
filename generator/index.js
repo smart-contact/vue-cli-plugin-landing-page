@@ -42,6 +42,10 @@ module.exports = function(api, options){
 		useProductsVuexModule: options.useProductsVuexModule
 	})
 
+	if(options.useRouter){
+		api.render("./template/router")
+	}
+
 	//create landing.config.js & landing-params.json
 	const landingConfig = {
 		name: api.rootOptions.projectName,
@@ -57,6 +61,7 @@ module.exports.hooks = api => {
 	api.afterInvoke(() => {
 		utils.cleanProject()
 		utils.createStylelintConfig()
+		utils.updateEslintConfig()
 		utils.injectImports()
 	})
 }
