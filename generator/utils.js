@@ -49,6 +49,7 @@ module.exports = function(api){
 				account: "prezzogiusto",
 				accountLogoMobile: "logo-prezzogiusto-small.svg",
 				accountLogo: "logo-prezzogiusto.svg",
+				copyFooter: "&copy; footer",
 				privacy_1: "Richiedendo il servizio confermo di aver letto e accettato i <a href=https://www.prezzogiusto.com/termini-e-condizioni target=blank> Termini e Condizioni del Sito</a> e di aver preso visione dell'<a href=https://www.prezzogiusto.com/privacy/ target=blank> Informativa sul trattamento dei dati personali</a>. Non tutti i consensi sono obbligatori,",
 				privacy_2: "Confermo di dare il consenso al trattamento dei miei dati personali per le finalità di marketing di Smart Contact tramite telefonate automatizzate e modalità assimilate, quali e-mail, sms, mms, notifiche push, social media, nonché modalità tradizionali come posta cartacea e telefonate con operatore ai sensi del par. 2.2 (d) dell’Informativa (facoltativo).",
 				privacy_3: "Confermo di dare il consenso al trattamento dei miei dati personali per le finalità di profilazione ai sensi del par. 2.2 (e) dell’Informativa (facoltativo).",
@@ -60,15 +61,13 @@ module.exports = function(api){
 
 		cleanProject(){
 			const filesToRemove = [
-				api.resolve("./public/favicon.ico"),
-				api.resolve("./src/components/HelloWorld.vue"),
-				api.resolve("./src/assets/logo.png"),
+				"public/favicon.ico",
+				"src/components/HelloWorld.vue",
+				"src/assets/logo.png",
 			]
 
-			filesToRemove.forEach(filePath => {
-				if(fs.existsSync(filePath)){
-					fs.unlinkSync(filePath)
-				}
+			api.render(files => {
+				filesToRemove.forEach(filename => delete files[filename])
 			})
 		},
 
