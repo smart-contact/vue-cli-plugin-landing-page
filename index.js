@@ -20,7 +20,7 @@ module.exports = (api, options) => {
 	const landingConfig = require(api.resolve("./landing.config.js"))
 	const landingParams = require(api.resolve("./landing-params.json"))
 
-	const buildFilenameTemplate = (ext) => `[name]-[hash:8].${ext}`
+	const buildFilenameTemplate = (ext) => `[name]-[contenthash].${ext}`
 
 	//inject all variables/functions/mixins to all vue sfc components
 	options.css = merge(options.css, {
