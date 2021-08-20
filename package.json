@@ -1,6 +1,6 @@
 {
   "name": "@smart-contact/vue-cli-plugin-landing-page",
-  "version": "1.4.0",
+  "version": "1.4.0-alpha.7",
   "main": "index.js",
   "repository": "https://github.com/smart-contact/vue-cli-plugin-landing-page.git",
   "license": "MIT",
@@ -8,6 +8,8 @@
     "release": "yarn publish --access public"
   },
   "devDependencies": {
+    "@vue/cli-plugin-router": "^4.5.13",
+    "@vue/cli-plugin-vuex": "^4.5.13",
     "eslint": "^7.31.0",
     "fs-extra": "^10.0.0"
   },

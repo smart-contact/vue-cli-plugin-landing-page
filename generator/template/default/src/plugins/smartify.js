@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { 
   FeatureBox,
+  CallMeBackForm,
   HeaderBrands,
   Footer,
   $utils
@@ -12,12 +13,10 @@ import {
 //Components
 const components = [
   HeaderBrands,
+  CallMeBackForm,
   FeatureBox,
-  Footer
+  Footer,
 ]
 components.forEach(component => {
   Vue.component($utils.prefixComponentName(component.name), component)
 })
-
-//Plugins
-// Vue.use(CallMeBackFormPlugin)

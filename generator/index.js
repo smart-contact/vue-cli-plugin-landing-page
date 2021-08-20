@@ -1,3 +1,6 @@
+const routerGenerator = require("@vue/cli-plugin-router/generator")
+const vuexGenerator = require("@vue/cli-plugin-vuex/generator")
+
 module.exports = function(api, options){
 	const utils = require("./utils")(api)
 
@@ -10,6 +13,7 @@ module.exports = function(api, options){
 			"@smart-contact/smartland-plugin-smart-bridge": "^0.x",
 			//"@smart-contact/landing-js": "^2.7.3",
 			"@smart-contact/validators": "^1.1.0",
+			"@vue/composition-api": "^1.1.1",
 			"vuelidate": "^0.7.x"
 		},
 		devDependencies: {
@@ -22,7 +26,25 @@ module.exports = function(api, options){
 		}
 	})
 
-	api.render("./template/default")
+	//execute router generator
+	if(options.useRouter){
+		routerGenerator(api, {
+			historyMode: false
+		})
+	}
+
+	//execute vuex generator
+	if(options.useVuex){
+		vuexGenerator(api)
+	}
+
+	api.render("./template/default", {
+		useProductsVuexModule: options.useProductsVuexModule
+	})
+
+	if(options.useRouter){
+		api.render("./template/router")
+	}
 
 	//create landing.config.js & landing-params.json
 	const landingConfig = {
@@ -31,11 +53,6 @@ module.exports = function(api, options){
 	}
 	utils.createLandingConfig(landingConfig)
 	utils.createLandingParamsJson()
-
-	//
-	api.injectImports(api.entryFile, "import \"@/plugins/index.js\"")
-	api.injectImports(api.entryFile, "import \"@/plugins/smartland.js\"")
-	api.injectImports(api.entryFile, "import \"@/plugins/smartify.js\"")
 }
 
 module.exports.hooks = api => {
@@ -43,8 +60,8 @@ module.exports.hooks = api => {
 
 	api.afterInvoke(() => {
 		utils.cleanProject()
-		utils.createJSConfig()
 		utils.createStylelintConfig()
-		utils.disableFontawesome()
+		utils.updateEslintConfig()
+		utils.injectImports()
 	})
 }

@@ -1,23 +1,26 @@
 const fs = require("fs")
+
+class File {
+	constructor(filePath){
+		this._splitter = /\r?\n/
+		this.filePath = filePath
+		this.file = fs.readFileSync(this.filePath, "utf-8")
+		this.lines = this.file.split(this._splitter)
+	}
+
+	editLines(callback){
+		callback(this.lines)
+		this.file = this.lines.join("\n")
+	}
+
+	save(){
+		fs.writeFileSync(this.filePath, this.file, "utf-8")
+	}
+}
+
 module.exports = function(api){
+
 	return {
-
-		createJSConfig(){
-			const filepath = api.resolve("./jsconfig.json")
-
-			const config = {
-				"compilerOptions": {
-					"baseUrl": ".",
-					"paths": {
-						"@/*": [
-							"src/*"
-						]
-					}
-				}
-			}
-
-			fs.writeFileSync(filepath, JSON.stringify(config, null, 2), "utf-8")
-		},
 
 		createStylelintConfig(){
 			const filePath = api.resolve("./.stylelintrc.js")
@@ -33,17 +36,6 @@ module.exports = function(api){
 					"number-leading-zero": null,
 				}
 			}
-      
-			// if(config.processors){
-			// 	const processors = Object.fromEntries(config.processors)
-
-			// 	if("@mapbox/stylelint-processor-arbitrary-tags" in processors){
-			// 		processors["@mapbox/stylelint-processor-arbitrary-tags"].fileFilterRegex = ["\.vue$"]
-			// 	}
-
-
-			// 	config.processors = Object.entries(processors)
-			// }
 
 			fs.writeFileSync(filePath, "module.exports = " + JSON.stringify(config, null, 2), "utf-8")
 		},
@@ -59,10 +51,11 @@ module.exports = function(api){
 				account: "prezzogiusto",
 				accountLogoMobile: "logo-prezzogiusto-small.svg",
 				accountLogo: "logo-prezzogiusto.svg",
+				copyFooter: "&copy; footer",
 				privacy_1: "Richiedendo il servizio confermo di aver letto e accettato i <a href=https://www.prezzogiusto.com/termini-e-condizioni target=blank> Termini e Condizioni del Sito</a> e di aver preso visione dell'<a href=https://www.prezzogiusto.com/privacy/ target=blank> Informativa sul trattamento dei dati personali</a>. Non tutti i consensi sono obbligatori,",
-				privacy_2: "Confermo di dare il consenso al trattamento dei miei dati personali per le finalità di marketing di Smart Contact tramite telefonate automatizzate e modalità assimilate, quali e-mail, sms, mms, notifiche push, social media, nonché modalità tradizionali come posta cartacea e telefonate con operatore ai sensi del par. 2.2 (d) dell’Informativa (facoltativo).",
-				privacy_3: "Confermo di dare il consenso al trattamento dei miei dati personali per le finalità di profilazione ai sensi del par. 2.2 (e) dell’Informativa (facoltativo).",
-				privacy_4: "Confermo di dare il consenso al trattamento dei miei dati personali per la comunicazione a terzi per finalità di marketing tramite telefonate automatizzate e modalità assimilate, quali e-mail, sms, mms, notifiche push, social media, nonché modalità tradizionali come posta cartacea e telefonate con operatore ai sensi del par. 2.2 (f) dell’Informativa. (facoltativo)."
+				privacy_2: "Confermo di dare il consenso al trattamento dei miei dati personali per le finalità di marketing di Smart Contact tramite telefonate automatizzate e modalità assimilate, quali e-mail, sms, mms, notifiche push, social media, nonché modalità tradizionali come posta cartacea e telefonate con operatore ai sensi del par. 2.2 (d) dell'Informativa (facoltativo).",
+				privacy_3: "Confermo di dare il consenso al trattamento dei miei dati personali per le finalità di profilazione ai sensi del par. 2.2 (e) dell'Informativa (facoltativo).",
+				privacy_4: "Confermo di dare il consenso al trattamento dei miei dati personali per la comunicazione a terzi per finalità di marketing tramite telefonate automatizzate e modalità assimilate, quali e-mail, sms, mms, notifiche push, social media, nonché modalità tradizionali come posta cartacea e telefonate con operatore ai sensi del par. 2.2 (f) dell'Informativa. (facoltativo)."
 			}
 
 			fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
@@ -82,13 +75,31 @@ module.exports = function(api){
 			})
 		},
 
-		disableFontawesome(){
-			const main = fs.readFileSync(api.resolve("src/main.js"), "utf-8")
-			const lines = main.split(/\r?\n/)
-			const importLineIndex = lines.indexOf("import \"./plugins/fontawesome\";")
-			lines[importLineIndex] = "//" + lines[importLineIndex]
+		injectImports(){
+			const mainFile = new File(api.resolve("src/main.js"))
+
+			mainFile.editLines((lines) => {
+				//insert after Vue import
+				let index = lines.findIndex(line => line.includes("vue"))
+				lines.splice(index + 1, 0, "import \"@/plugins/index.js\"")
+
+				//insert after bootstrap-vue import
+				index = lines.findIndex(line => line.includes("bootstrap-vue"))
+				lines.splice(index + 1, 0, "import \"@/plugins/smartland.js\"", "import \"@/plugins/smartify.js\"")
+			})
 			
-			fs.writeFileSync(api.resolve("src/main.js"), lines.join("\n"))
+			mainFile.save()
+		},
+
+		updateEslintConfig(){
+			const file = new File(api.resolve("./.eslintrc.js"))
+
+			file.editLines(lines => {
+				const index = lines.findIndex(line => line.includes("parser: \"@babel/eslint-parser\""))
+				lines.splice(index + 1, 0, "\t\trequireConfigFile: false,")
+			})
+
+			file.save()
 		}
 	}
 }
