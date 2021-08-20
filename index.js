@@ -22,8 +22,6 @@ module.exports = (api, options) => {
 
 	const buildFilenameTemplate = (ext) => `[name]-[hash:8].${ext}`
 
-
-
 	//inject all variables/functions/mixins to all vue sfc components
 	options.css = merge(options.css, {
 		loaderOptions: {
@@ -105,7 +103,17 @@ module.exports = (api, options) => {
 					return args
 				})
 
+			
 			//modify css
+			config.module
+				.rule("css")
+				.use("mini-css-extract-plugin")
+				.tap(args => {
+					args.publicPath = options.publicPath
+					return args
+				})
+
+				
 			config
 				.plugin("extract-css")
 				.tap(args => {
