@@ -28,8 +28,8 @@
               sap: { value: '{{ sap }}', default: '' },
               successURL: '{{ successURL }}',
               account: { value: '{{ account }}', default: 'prezzogiusto' },
-              accountLogo: { value: '{{ accountLogo }}', default: 'prezzogiusto' },
-              accountLogoMobile: { value: '{{ accountLogoMobile }}', default: 'prezzogiusto' },
+              accountLogo: { value: '{{ accountLogo }}', default: 'logo-prezzogiusto.svg' },
+              accountLogoMobile: { value: '{{ accountLogoMobile }}', default: 'logo-prezzogiusto-small.svg' },
 
               //copy
               copyTitle: { value: `{{ copyTitle }}`, default: '' },
@@ -46,11 +46,11 @@
               //tracking
               gclid: this.url.searchParams.get('gclid'),
               f5: { value: this.url.searchParams.get('f5') || '{{ f5 }}', default: 'sem' },
-              f11: { value: this.url.searchParams.get('f11') || '{{ f11 }}', default: '' },
+              f11: { value: this.url.searchParams.get('f11') || '{{ f11 }}', default: '0' },
               f12: { value: this.url.searchParams.get('keyword') || '0' },
               f13: { value: this.url.searchParams.get('matchtype') || '0' },
               f14: { value: this.url.searchParams.get('creative') || '0' },
-              f15: { value: this.url.searchParams.get('f15') || '{{ f15 }}', default: '' }
+              f15: { value: this.url.searchParams.get('f15') || '{{ f15 }}', default: '0' }
             }
           },
 
