@@ -110,13 +110,13 @@ module.exports = (api, options) => {
 				})
 				
 			//modify css
-			config.module
-				.rule("css")
-				.use("mini-css-extract-plugin")
-				.tap(args => {
-					args.publicPath = options.publicPath
-					return args
-				})
+			// config.module
+			// 	.rule("css")
+			// 	.use("mini-css-extract-plugin")
+			// 	.tap(args => {
+			// 		args.publicPath = options.publicPath
+			// 		return args
+			// 	})
 
 				
 			config
