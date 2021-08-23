@@ -95,7 +95,7 @@ module.exports = function(api){
 			const file = new File(api.resolve("./.eslintrc.js"))
 
 			file.editLines(lines => {
-				const index = lines.findIndex(line => line.includes("parser: \"@babel/eslint-parser\""))
+				const index = lines.findIndex(line => line.includes("@babel/eslint-parser"))
 				lines.splice(index + 1, 0, "\t\trequireConfigFile: false,")
 			})
 
