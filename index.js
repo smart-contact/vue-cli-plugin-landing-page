@@ -3,6 +3,7 @@ const StylelintWebpackPlugin = require("stylelint-webpack-plugin")
 const ZipWebpackPlugin = require("zip-webpack-plugin")
 const LandingParamsPlugin = require("@smart-contact/landing-params-webpack-plugin")
 const ImageminPlugin = require("imagemin-webpack-plugin").default
+const { getLivelandingConstants } = require("./utils/constants.js")
 
 const scssGlobalImports = [
 	"@import \"~bootstrap/scss/_functions.scss\"", //=====================|
@@ -21,6 +22,7 @@ module.exports = (api, options) => {
 	const landingParams = require(api.resolve("./landing-params.json"))
 
 	const buildFilenameTemplate = (ext) => `[name]-[contenthash].${ext}`
+	const LIVELANDING_CONSTANTS = getLivelandingConstants(landingConfig)
 
 	//inject all variables/functions/mixins to all vue sfc components
 	options.css = merge(options.css, {
@@ -75,6 +77,12 @@ module.exports = (api, options) => {
 				}
 			])
 
+		config
+			.plugin("define")
+			.tap(args => {
+				args[0] = merge(args[0], LIVELANDING_CONSTANTS)
+				return args
+			})
 
 		//production only
 		if(process.env.NODE_ENV === "production"){

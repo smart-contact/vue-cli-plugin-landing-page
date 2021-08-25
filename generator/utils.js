@@ -95,8 +95,32 @@ module.exports = function(api){
 			const file = new File(api.resolve("./.eslintrc.js"))
 
 			file.editLines(lines => {
-				const index = lines.findIndex(line => line.includes("@babel/eslint-parser"))
-				lines.splice(index + 1, 0, "\t\trequireConfigFile: false,")
+				if(!lines.find(line => line.includes("requireConfigFile"))){
+					const index = lines.findIndex(line => line.includes("@babel/eslint-parser"))
+					lines.splice(index + 1, 0, "\t\trequireConfigFile: false,")
+				}
+				
+				//add globals
+				let globalsIndex = lines.findIndex(line => line.includes("globals"))
+
+				if(globalsIndex === -1){
+					const globalLines = [
+						"\tglobals: {",
+						"\t}"
+					]
+
+					lines.splice(lines.length - 1, 0, ...globalLines)
+					globalsIndex = lines.length - 2
+				}
+
+				const globalVars = [
+					"LIVELANDING_CDN_CSS_URL",
+					"LIVELANDING_CDN_JS_URL",
+					"LIVELANDING_CDN_IMAGES_URL",
+					"LIVELANDING_CDN_FILES_URL",
+				]
+				
+				globalVars.forEach((varName, i) => lines.splice(globalsIndex + i, 0, `\t\t${varName}: true,`))
 			})
 
 			file.save()
