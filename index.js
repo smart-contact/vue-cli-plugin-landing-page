@@ -41,7 +41,19 @@ module.exports = (api, options) => {
 			.chunkFilename(buildFilenameTemplate("js"))
         
 		config.devtool("source-map")
-    
+
+		//override svg config
+		config.module.rules.delete("svg")
+		config.module
+			.rule("svg")
+			.test(/\.svg$/)
+			.use("svg")
+			.loader("file-loader")
+			.options({
+				esModule: false,
+				name: "[name].[ext]"
+			})
+
 		//add landing-params plugin
 		config
 			.plugin("landing-params")
@@ -76,14 +88,6 @@ module.exports = (api, options) => {
 					args.fallback.options.name = "[name].[ext]"
 					return args
 				})
-        
-			config.module
-				.rule("svg")
-				.use("file-loader")
-				.tap(args => {
-					args.name = "[name].[ext]"
-					return args
-				})
 
 			config.module
 				.rule("media")
@@ -108,16 +112,6 @@ module.exports = (api, options) => {
 					args[0].minify = false
 					return args
 				})
-				
-			//modify css
-			// config.module
-			// 	.rule("css")
-			// 	.use("mini-css-extract-plugin")
-			// 	.tap(args => {
-			// 		args.publicPath = options.publicPath
-			// 		return args
-			// 	})
-
 				
 			config
 				.plugin("extract-css")
