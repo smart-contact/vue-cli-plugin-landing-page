@@ -105,7 +105,7 @@ export default {
     <%_ if(useProductsVuexModule) {_%>
       const [buyer] = this.buyers
     <%_ } else { _%>
-      const [buyer] = this.products.buyers
+      const [buyer] = this.products.buyers.value
     <%_ } _%>
 
       return buyer ? {
