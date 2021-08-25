@@ -35,6 +35,7 @@
               copyTitle: { value: `{{ copyTitle }}`, default: '' },
               copySubtitle: { value: `{{ copySubtitle }}`, default: '' },
               copyMainCmbTitle: { value: `{{ copyMainCmbTitle }}`, default: '' },
+              copyFooter: { value: `{{ copyFooter }}` },
 
               //privacy
               "*privacy_1": `{{ privacy_1 }}`,
@@ -56,7 +57,10 @@
           data(){
             return{
               //inserisci qui i dati di default da mandare in injection
-              
+              url_landing: this.url.toString(),
+              name: '-',
+              surname: '-',
+              offer: '-'
             }
           },
 
