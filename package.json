@@ -11,8 +11,7 @@
     "@vue/cli-plugin-router": "^4.5.13",
     "@vue/cli-plugin-vuex": "^4.5.13",
     "eslint": "^7.31.0",
-    "fs-extra": "^10.0.0",
-    "set-value": "^4.0.1"
+    "fs-extra": "^10.0.0"
   },
   "dependencies": {
     "glob-parent": "^3.1.0",
