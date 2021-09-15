@@ -104,13 +104,13 @@ module.exports = function(api){
 				let globalsIndex = lines.findIndex(line => line.includes("globals"))
 
 				if(globalsIndex === -1){
+					globalsIndex = lines.length - 2
 					const globalLines = [
 						"\tglobals: {",
 						"\t}"
 					]
 
-					lines.splice(lines.length - 1, 0, ...globalLines)
-					globalsIndex = lines.length - 2
+					lines.splice(globalsIndex, 0, ...globalLines)
 				}
 
 				const globalVars = [
@@ -120,7 +120,7 @@ module.exports = function(api){
 					"LIVELANDING_CDN_FILES_URL",
 				]
 				
-				globalVars.forEach((varName, i) => lines.splice(globalsIndex + i, 0, `\t\t${varName}: true,`))
+				globalVars.forEach((varName, i) => lines.splice((globalsIndex + 1) + i, 0, `\t\t${varName}: true,`))
 			})
 
 			file.save()
