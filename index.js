@@ -4,13 +4,15 @@ const ZipWebpackPlugin = require("zip-webpack-plugin")
 const LandingParamsPlugin = require("@smart-contact/landing-params-webpack-plugin")
 const ImageminPlugin = require("imagemin-webpack-plugin").default
 const { getLivelandingConstants } = require("./utils/constants.js")
+const bootstrapSassImports = require('vue-cli-plugin-bootstrap-vue/sassAbstractsImports.js')
 
 const scssGlobalImports = [
-	"@import \"~bootstrap/scss/_functions.scss\"", //=====================|
-	"@import \"~@/assets/scss/vendors/bootstrap-vue/_custom.scss\"", //    |
-	"@import \"~bootstrap/scss/_variables.scss\"", //                     |---> Bootstrap Vars/functions/mixins
-	"@import \"~bootstrap/scss/_mixins.scss\"", //                        |
-	"@import \"~bootstrap-vue/src/_variables.scss\"", //==================|
+	// "@import \"~bootstrap/scss/_functions.scss\"", //=====================|
+	// "@import \"~@/assets/scss/vendors/bootstrap-vue/_custom.scss\"", //    |
+	// "@import \"~bootstrap/scss/_variables.scss\"", //                     |---> Bootstrap Vars/functions/mixins
+	// "@import \"~bootstrap/scss/_mixins.scss\"", //                        |
+	// "@import \"~bootstrap-vue/src/_variables.scss\"", //==================|
+	...bootstrapSassImports,
 	"@import \"~@smart-contact/smartify/src/scss/_functions.scss\"", //========|
 	"@import \"~@/assets/scss/vendors/smartify/_custom.scss\"", //              |---> Smartify Vars/Functions/mixins
 	"@import \"~@smart-contact/smartify/src/scss/_variables.scss\"", //        |
