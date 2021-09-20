@@ -35,8 +35,8 @@ export default {
     SCallMeBackModal
   },
 
-  setup(props, { parent }){
-    const lead = useLead(parent.$landing)
+  setup(props, context){
+    const lead = useLead(context)
 
     return {    
       lead
