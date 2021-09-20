@@ -34,8 +34,12 @@
     </s-footer>
 
     <s-call-me-back-modal id="call-me-back-modal" 
+      title="Vuoi avere maggiori informazioni su questa offerta?"
+      subtitle="Un consulente ti contatterà per fornirti tutte le informazioni neccessarie gratis"
       :cmb-form-loading="lead.sending.value"
+      @show="onCallMeBackModalShow"
       @hide="onCallMeBackModalHide"
+      :callMeBackFormOptions="callMeBackFormOptions"
       @submit="lead.send"
     />
   </div>
@@ -81,6 +85,20 @@ export default {
     }
   },
 
+  data(){
+    return {
+      callMeBackFormOptions: {
+        "phone-field-attrs": {
+          placeholder: "Inserisci il tuo numero di cellulare",
+          class: "text-center",
+        },
+        "submit-btn-classes": "text-uppercase",
+        "submit-btn-variant": "success",
+        "submit-btn-text": "Ti chiamiamo noi",
+      },
+    }
+  },
+
   computed: {
   <%_ if(useProductsVuexModule) {_%>
     ...mapState("products", { products: "items", buyers: "buyers" }),
@@ -119,6 +137,14 @@ export default {
   <%_ if(useProductsVuexModule) {_%>
     ...mapActions("products", ["loadProducts"]),
   <%_ } _%>
+    onCallMeBackModalShow(){
+    <%_ if(!useProductsVuexModule){_%>
+      if (this.products.selected) {
+        this.$landing.data.set("offer", `${this.products.selected.buyer.name} - ${this.products.selected.name}`);
+        this.$landing.data.set("buyer", this.products.selected.buyer.name);
+      }
+    <%_ } _%>
+    },
     onCallMeBackModalHide(){
       this.$landing.data.restoreDefaults()
     },
