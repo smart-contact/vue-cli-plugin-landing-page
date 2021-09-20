@@ -67,8 +67,8 @@ export default {
     SCallMeBackModal
   },
 
-  setup(props, { parent }){
-    const lead = useLead(parent.$landing)
+  setup(props, context){
+    const lead = useLead(context)
   <%_ if(!useProductsVuexModule) {_%>
     const products = useProducts()
   <%_ } _%>
