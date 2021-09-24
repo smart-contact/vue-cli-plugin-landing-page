@@ -47,7 +47,8 @@
 
 <script>
 <%_ if(useProductsVuexModule) {_%>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
+import { _mutationsKeys as productsMutationsKeys } from '@smart-contact/smartify/src/vue/vuex-modules/products';
 <%_ } _%>
 import { 
 <%_ if(!useProductsVuexModule) {_%>
@@ -135,13 +136,24 @@ export default {
 
   methods: {
   <%_ if(useProductsVuexModule) {_%>
+    ...mapMutations("products", {
+      "setSelectedProductIndex": productsMutationsKeys.setSelectedItemIndex
+    }),
     ...mapActions("products", ["loadProducts"]),
   <%_ } _%>
+    onProductSelected({ index }) {
+    <%_ if(useProductsVuexModule) {_%>
+      this.setSelectedProductIndex(index);
+    <%_ }else{ _%>
+      this.products.setSelectedIndex(index);
+    <%_ } _%>
+      this.$bvModal.show("call-me-back-modal");
+    },
     onCallMeBackModalShow(){
     <%_ if(!useProductsVuexModule){_%>
-      if (this.products.selected) {
-        this.$landing.data.set("offer", `${this.products.selected.buyer.name} - ${this.products.selected.name}`);
-        this.$landing.data.set("buyer", this.products.selected.buyer.name);
+      if (this.products.selected.value) {
+        this.$landing.data.set("offer", `${this.products.selected.value.buyer.name} - ${this.products.selected.value.name}`);
+        this.$landing.data.set("buyer", this.products.selected.value.buyer.name);
       }
     <%_ } _%>
     },
