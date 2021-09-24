@@ -125,6 +125,7 @@ module.exports = function(api){
 
 			file.save()
 		},
+		
 		updateBrowserlist(){
 			const file = new File(api.resolve('./.browserslistrc'))
 			const queries = [

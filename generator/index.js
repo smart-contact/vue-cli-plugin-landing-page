@@ -61,9 +61,9 @@ module.exports.hooks = api => {
 
 	api.afterInvoke(() => {
 		utils.cleanProject()
+		utils.updateBrowserlist()
 		utils.createStylelintConfig()
 		utils.updateEslintConfig()
 		utils.injectImports()
-		utils.updateBrowserlist()
 	})
 }
