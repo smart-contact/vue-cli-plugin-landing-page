@@ -14,6 +14,7 @@ module.exports = function(api, options){
 			"@smart-contact/smartland-plugin-scheduler": "^1.x",
 			"@smart-contact/validators": "^1.1.0",
 			"@vue/composition-api": "^1.1.1",
+			"vue-recaptcha-v3": "^1.9.0",
 			"vuelidate": "^0.7.x"
 		},
 		devDependencies: {
