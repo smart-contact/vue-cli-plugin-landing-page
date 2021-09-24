@@ -108,11 +108,11 @@ export default {
       const { account, accountLogo, accountLogoMobile } = this.$landing.params.get();
       return [
         {
-          src: `https://smart-contact-cdn.livelanding.it/images/${accountLogo}`,
+          src: `${LIVELANDING_CDN_IMAGES_URL}/${accountLogo}`,
           media: "(min-width: 768px)",
         },
         {
-          src: `https://smart-contact-cdn.livelanding.it/images/${accountLogoMobile}`,
+          src: `${LIVELANDING_CDN_IMAGES_URL}/${accountLogoMobile}`,
           alt: `logo ${account}`,
           media: "(max-width: 767.98px)",
           default: true,
