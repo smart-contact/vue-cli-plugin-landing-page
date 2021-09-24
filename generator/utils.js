@@ -124,6 +124,22 @@ module.exports = function(api){
 			})
 
 			file.save()
+		},
+		updateBrowserlist(){
+			const file = new File(api.resolve('./.browserslistrc'))
+			const queries = [
+				'not ie 11'
+			]
+
+			file.editLines(lines => {
+				queries.forEach(query => {
+					if(!lines.includes(queries)){
+						lines.splice(lines.length, 0, 'not ie 11')
+					}
+				})
+			})
+
+			file.save()
 		}
 	}
 }
