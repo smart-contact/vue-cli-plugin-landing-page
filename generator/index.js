@@ -11,7 +11,7 @@ module.exports = function(api, options){
 			"@smart-contact/smartify": "^0.x",
 			"@smart-contact/smartland": "^3.x",
 			"@smart-contact/smartland-plugin-smart-bridge": "^0.x",
-			//"@smart-contact/landing-js": "^2.7.3",
+			"@smart-contact/smartland-plugin-scheduler": "^1.x",
 			"@smart-contact/validators": "^1.1.0",
 			"@vue/composition-api": "^1.1.1",
 			"vuelidate": "^0.7.x"
