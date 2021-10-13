@@ -46,24 +46,23 @@ module.exports = function(api, options){
 	if(options.useRouter){
 		api.render("./template/router")
 	}
-
-	//create landing.config.js & landing-params.json
-	const landingConfig = {
-		name: api.rootOptions.projectName,
-		cdnBaseURL: options.cdnBaseURL
-	}
-	utils.createLandingConfig(landingConfig)
-	utils.createLandingParamsJson()
 }
 
-module.exports.hooks = api => {
+module.exports.hooks = (api, options) => {
 	const utils = require("./utils")(api)
-
+	
 	api.afterInvoke(() => {
 		utils.cleanProject()
 		utils.updateBrowserlist()
 		utils.createStylelintConfig()
 		utils.updateEslintConfig()
+		//create landing.config.js & landing-params.json
+		const landingConfig = {
+			name: api.rootOptions.projectName,
+			cdnBaseURL: options.cdnBaseURL
+		}
+		utils.createLandingConfig(landingConfig)
+		utils.createLandingParamsJson()
 		utils.injectImports()
 	})
 }
