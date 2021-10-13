@@ -140,6 +140,7 @@ export default {
       lead,
       accountLogo,
       buyerLogo,
+      sendLead,
       callMeBackModalEvents
     }
   },
