@@ -27,16 +27,17 @@
               // products: { value: '{{ products }}', default: '1,3', parser: value => JSON.parse('[' + value + ']') },
               sap: { value: '{{ sap }}', default: '' },
               useFo: { value: '{{ useFo }}', default: '1', parser: value => !!Number(value) },
+              useRecaptcha: { value: '{{ useRecaptcha }}', default: '1', parser: value => !!Number(value) },
               successURL: '{{ successURL }}',
-              account: { value: '{{ account }}', default: 'prezzogiusto' },
-              accountLogo: { value: '{{ accountLogo }}', default: 'logo-prezzogiusto.svg' },
-              accountLogoMobile: { value: '{{ accountLogoMobile }}', default: 'logo-prezzogiusto-small.svg' },
+              account: '{{ account }}',
+              accountLogo: '{{ accountLogo }}',
+              accountLogoMobile: '{{ accountLogoMobile }}',
 
               //copy
-              copyTitle: { value: `{{ copyTitle }}`, default: '' },
-              copySubtitle: { value: `{{ copySubtitle }}`, default: '' },
-              copyMainCmbTitle: { value: `{{ copyMainCmbTitle }}`, default: '' },
-              copyFooter: { value: `{{ copyFooter }}` },
+              copyTitle: `{{ copyTitle }}`,
+              copySubtitle: `{{ copySubtitle }}`,
+              copyMainCmbTitle: `{{ copyMainCmbTitle }}`,
+              copyFooter: `{{ copyFooter }}`,
 
               //privacy
               "*privacy_1": `{{ privacy_1 }}`,

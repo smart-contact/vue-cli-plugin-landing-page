@@ -70,7 +70,9 @@ export default {
 
   setup(props, context){
     const { $landing } = context.root
-    const lead = useLead(context)
+    const lead = useLead(context, {
+      disableRecaptchaCheck: !$landing.params.get('useRecaptcha')
+    })
   <%_ if(!useProductsVuexModule) {_%>
     const products = useProducts()
   <%_ } _%>
