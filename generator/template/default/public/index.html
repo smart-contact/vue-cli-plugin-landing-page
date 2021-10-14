@@ -75,10 +75,10 @@
         options: {
 
         },
-        afterInit(landing){
+        async afterInit(landing){
           //setup fuori orario
           if(landing.params.get('useFo')){
-            landing.scheduleBetween('21:00:00', '09:00:00', () => {
+            await landing.scheduleBetween('21:00:00', '09:00:00', () => {
               landing.params.set('sap', landing.params.get('sap') + '_fo');
             })
           }
