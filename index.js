@@ -86,30 +86,17 @@ module.exports = (api, options) => {
 
 			//modify images
 			config.module
-				.rule("images")
-				.use("url-loader")
-				.tap(args => {
-					args.fallback.options.name = "[name].[ext]"
-					return args
-				})
+				.rule("images").store
+				.get('generator').filename = '[name].[ext]'
+
 
 			config.module
-				.rule("media")
-				.use("url-loader")
-				.tap(args => {
-					args.fallback.options.name = "[name].[ext]"
-
-					return args
-				})
+				.rule("media").store
+				.get('generator').filename = '[name].[ext]'
 
 			config.module
-				.rule("fonts")
-				.use("url-loader")
-				.tap(args => {
-					args.fallback.options.name = "[name].[ext]"
-
-					return args
-				})
+				.rule("fonts").store
+				.get('generator').filename = '[name].[ext]'
 
 			config.plugin("html")
 				.tap(args => {

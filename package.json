@@ -1,9 +1,16 @@
 {
   "name": "@smart-contact/vue-cli-plugin-landing-page",
-  "version": "1.8.1-alpha.0",
+  "version": "1.9.9-alpha.4",
   "main": "index.js",
   "repository": "https://github.com/smart-contact/vue-cli-plugin-landing-page.git",
   "license": "MIT",
+  "files": [
+    "generator",
+    "utils",
+    "index.js",
+    "prompts.js",
+    "README.md"
+  ],
   "scripts": {
     "release": "yarn publish --access public"
   },

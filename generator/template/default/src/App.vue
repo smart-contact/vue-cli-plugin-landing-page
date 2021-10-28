@@ -37,15 +37,16 @@
       title="Vuoi avere maggiori informazioni su questa offerta?"
       subtitle="Un consulente ti contatterà per fornirti tutte le informazioni neccessarie gratis"
       :cmb-form-loading="lead.sending.value"
-      @show="onCallMeBackModalShow"
-      @hide="onCallMeBackModalHide"
+      @show="callMeBackModalEvents.onShow"
+      @hide="callMeBackModalEvents.onHide"
       :callMeBackFormOptions="callMeBackFormOptions"
-      @submit="lead.send"
+      @submit="sendLead"
     />
   </div>
 </template>
 
 <script>
+import { computed, onBeforeMount } from '@vue/composition-api'
 <%_ if(useProductsVuexModule) {_%>
 import { mapState, mapActions, mapMutations } from "vuex";
 import { _mutationsKeys as productsMutationsKeys } from '@smart-contact/smartify/src/vue/vuex-modules/products';
@@ -56,33 +57,91 @@ import {
 <%_ } _%>
   useLead
 } from '@smart-contact/smartify/src/vue/composables'
-
+import useCallMeBackModalEvents from '@/composables/useCallMeBackModalEvents'
 import OverlayLoadingScreen from '@/components/OverlayLoadingScreen'
 // import AppHero from "@/components/AppHero.vue";
-const SCallMeBackModal = () => import(
-    /* webpackChunkName: "call-me-back-modal" */
-    '@smart-contact/smartify/src/vue/components/modals/CallMeBackModal.vue'
-  );
 
 export default {
   name: "App",
   components: {
     OverlayLoadingScreen,
     // AppHero,
-    SCallMeBackModal
   },
 
   setup(props, context){
-    const lead = useLead(context)
+    const { $landing } = context.root
+    const lead = useLead(context, {
+      disableRecaptchaCheck: !$landing.params.get('useRecaptcha')
+    })
   <%_ if(!useProductsVuexModule) {_%>
     const products = useProducts()
   <%_ } _%>
+    const callMeBackModalEvents = useCallMeBackModalEvents({ 
+      $landing, 
+    <%_ if(!useProductsVuexModule) {_%>
+      selectedProduct: products.selectedProduct.value
+    <%_ } _%>
+    })
+
+    const accountLogo = computed(() => {
+      const { account, accountLogo, accountLogoMobile } = $landing.params.get();
+      return [
+        {
+          src: `${LIVELANDING_CDN_IMAGES_URL}/${accountLogo}`,
+          media: "(min-width: 768px)",
+        },
+        {
+          src: `${LIVELANDING_CDN_IMAGES_URL}/${accountLogoMobile}`,
+          alt: `logo ${account}`,
+          media: "(max-width: 767.98px)",
+          default: true,
+        },
+      ];
+    })
+
+    const buyerLogo = computed(() => {
+    <%_ if(useProductsVuexModule) {_%>
+      const [buyer] = this.buyers
+    <%_ } else { _%>
+      const [buyer] = this.products.buyers.value
+    <%_ } _%>
+
+      return buyer ? {
+        src: buyer.imageUrl,
+        alt: `logo ${buyer.name}`,
+      } : {};
+    })
+    
+    const sendLead = async (data) => {
+      try{
+        const successURL = $landing.params.has('successURL') && $landing.params.get('successURL')
+        await lead.send(data)
+        if(successURL){
+          location.href = successURL
+        }
+      }
+      catch(err){
+        console.error(err)
+      }
+    }
+
+    onBeforeMount(() => {
+      products.load({
+        // collection: this.$landing.params.get('collection'),
+        // getBuyers: false
+        productsIds: this.$landing.params.get("products")
+      })
+    })
 
     return {
     <%_ if(!useProductsVuexModule) {_%>
       products,
     <%_ } _%>
-      lead
+      lead,
+      accountLogo,
+      buyerLogo,
+      sendLead,
+      callMeBackModalEvents
     }
   },
 
@@ -100,39 +159,11 @@ export default {
     }
   },
 
+<%_ if(useProductsVuexModule) {_%>
   computed: {
-  <%_ if(useProductsVuexModule) {_%>
     ...mapState("products", { products: "items", buyers: "buyers" }),
-  <%_ } _%>
-    accountLogo() {
-      const { account, accountLogo, accountLogoMobile } = this.$landing.params.get();
-      return [
-        {
-          src: `${LIVELANDING_CDN_IMAGES_URL}/${accountLogo}`,
-          media: "(min-width: 768px)",
-        },
-        {
-          src: `${LIVELANDING_CDN_IMAGES_URL}/${accountLogoMobile}`,
-          alt: `logo ${account}`,
-          media: "(max-width: 767.98px)",
-          default: true,
-        },
-      ];
-    },
-
-    buyerLogo() {
-    <%_ if(useProductsVuexModule) {_%>
-      const [buyer] = this.buyers
-    <%_ } else { _%>
-      const [buyer] = this.products.buyers.value
-    <%_ } _%>
-
-      return buyer ? {
-        src: buyer.imageUrl,
-        alt: `logo ${buyer.name}`,
-      } : {};
-    },
   },
+<%_ } _%>
 
   methods: {
   <%_ if(useProductsVuexModule) {_%>
@@ -148,35 +179,18 @@ export default {
       this.products.setSelectedIndex(index);
     <%_ } _%>
       this.$bvModal.show("call-me-back-modal");
-    },
-    onCallMeBackModalShow(){
-    <%_ if(!useProductsVuexModule){_%>
-      if (this.products.selected.value) {
-        this.$landing.data.set("offer", `${this.products.selected.value.buyer.name} - ${this.products.selected.value.name}`);
-        this.$landing.data.set("buyer", this.products.selected.value.buyer.name);
-      }
-    <%_ } _%>
-    },
-    onCallMeBackModalHide(){
-      this.$landing.data.restoreDefaults()
-    },
+    }
   },
 
+<%_ if(useProductsVuexModule) {_%>
   created() {
-  <%_ if(useProductsVuexModule) {_%>
     this.loadProducts({
       // collection: this.$landing.params.get('collection'),
       // getBuyers: false
       productsIds: this.$landing.params.get("products")
     });
-  <%_ } else { _%>
-    this.products.load({
-       // collection: this.$landing.params.get('collection'),
-      // getBuyers: false
-      productsIds: this.$landing.params.get("products")
-    })
+  }
   <%_ } _%>
-  },
 };
 </script>
 

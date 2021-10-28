@@ -4,17 +4,19 @@ import SmartlandPluginSmartBridge from "@smart-contact/smartland-plugin-smart-br
 import SmartlandPluginScheduler from "@smart-contact/smartland-plugin-scheduler";
 
 const { config = {}, options = {},  afterInit } = window.$landingConfig
-const {  params = {},  data = {}, injection = {} } = config
+const { params = {},  data = {}, injection = {} } = config
 
 const plugins = [
-  [SmartlandPluginSmartBridge, injection.smartBridge || {}],
   [SmartlandPluginScheduler]
 ];
+
+injection.plugin = SmartlandPluginSmartBridge
 
 Vue.use(SmartlandVuePlugin, {
   config: {
     params,
-    data
+    data,
+    injection
   },
   options,
 

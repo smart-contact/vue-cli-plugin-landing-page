@@ -4,6 +4,7 @@ import {
   CallMeBackForm,
   HeaderBrands,
   Footer,
+  CallMeBackModal,
   $utils
 } from '@smart-contact/smartify'
 
@@ -16,6 +17,7 @@ const components = [
   CallMeBackForm,
   FeatureBox,
   Footer,
+  CallMeBackModal
 ]
 components.forEach(component => {
   Vue.component($utils.prefixComponentName(component.name), component)
