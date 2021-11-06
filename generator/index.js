@@ -9,7 +9,7 @@ module.exports = function(api, options){
 		dependencies: {
 			"@smart-contact/comparatore-api-service": "^2.6.x",
 			"@smart-contact/smartify": "^0.x",
-			"@smart-contact/smartland": "^3.x",
+			"@smart-contact/smartland": "^3.1.x",
 			"@smart-contact/smartland-plugin-smart-bridge": "^1.x",
 			"@smart-contact/smartland-plugin-scheduler": "^1.x",
 			"@smart-contact/validators": "^1.1.0",
@@ -46,14 +46,9 @@ module.exports = function(api, options){
 	if(options.useRouter){
 		api.render("./template/router")
 	}
-
 	
-}
+	api.onCreateComplete(async () => {
 
-module.exports.hooks = (api, options) => {
-	const utils = require("./utils")(api)
-	
-	api.afterAnyInvoke(() => {
 		utils.cleanProject()
 		utils.updateBrowserlist()
 		utils.createStylelintConfig()
@@ -64,7 +59,7 @@ module.exports.hooks = (api, options) => {
 			cdnBaseURL: options.cdnBaseURL
 		}
 		utils.createLandingConfig(landingConfig)
-		utils.createLandingParamsJson()
 		utils.injectImports()
 	})
+	
 }
